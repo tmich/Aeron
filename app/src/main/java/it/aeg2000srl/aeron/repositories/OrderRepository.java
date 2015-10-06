@@ -4,10 +4,13 @@ import java.util.List;
 
 import it.aeg2000srl.aeron.core.Order;
 import it.aeg2000srl.aeron.core.OrderItem;
+import it.aeg2000srl.aeron.core.Product;
 import it.aeg2000srl.aeron.entities.EOrder;
 import it.aeg2000srl.aeron.entities.EOrderItem;
 import it.aeg2000srl.aeron.factories.CustomerFactory;
 import it.aeg2000srl.aeron.factories.OrderFactory;
+import it.aeg2000srl.aeron.factories.OrderItemFactory;
+import it.aeg2000srl.aeron.factories.ProductFactory;
 
 /**
  * Created by tiziano.michelessi on 06/10/2015.
@@ -24,35 +27,39 @@ public class OrderRepository implements IRepository<Order> {
         Order order = fact.from(EOrder.findById(EOrder.class, id)).make();
 
         List<EOrderItem> items = EOrderItem.find(EOrderItem.class, "e_order = ?", String.valueOf(id));
+        OrderItemFactory orderItemFactory = new OrderItemFactory();
+
         for (EOrderItem item : items) {
-            order.getItems().add(createItem(item));
+            order.getItems().add(orderItemFactory.from(item).make());
         }
 
         return order;
     }
 
-    protected OrderItem createItem(EOrderItem entity) {
-        OrderItem orderItem = new OrderItem(entity.eProduct.getId(), entity.quantity);
-        orderItem.setId(entity.getId());
-        orderItem.setDiscount(entity.discount);
-        orderItem.setNotes(entity.notes);
-
-        return orderItem;
-    }
-
     @Override
     public long add(Order order) {
-        return 0;
+        EOrder entity = OrderFactory.toEntity(order);
+        entity.save();
+
+        for(OrderItem item : order.getItems()) {
+            EOrderItem eOrderItem = OrderItemFactory.toEntity(item);
+            eOrderItem.eOrder = entity;
+            eOrderItem.save();
+        }
+
+        return entity.getId();
     }
 
     @Override
     public void edit(Order order) {
-
+        EOrder entity = OrderFactory.toEntity(order);
+        entity.save();
     }
 
     @Override
     public void remove(Order order) {
-
+        EOrder entity = OrderFactory.toEntity(order);
+        entity.delete();
     }
 
     @Override
@@ -62,7 +69,7 @@ public class OrderRepository implements IRepository<Order> {
 
     @Override
     public long size() {
-        return 0;
+        return EOrder.count(EOrder.class, null, null);
     }
 
     @Override

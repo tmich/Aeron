@@ -64,8 +64,9 @@ public class CustomerRepositoryTest extends AndroidTestCase {
 
     public void testShouldReplaceValuesOnConflict() {
         ArrayList<Customer> bulk = new ArrayList<>();
-        Customer customer = repo.findById(new Random().nextInt((int)repo.size()+1));
-        String code = customer.getCode();
+        String code = rnd.substring(1,6);
+        Customer customer = new Customer("PAPPO", "via poppo", "Milano");
+        customer.setCode(code);
         customer.setName(customer.getName() + " - MODIFICATO");
         bulk.add(customer);
         repo.addAll(bulk);

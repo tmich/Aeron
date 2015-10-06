@@ -10,9 +10,9 @@ import java.util.List;
 public class Order {
     protected long id;
     protected Customer customer;
-    protected Date creationDate;
+    protected Date creationDate = null;
 //    protected long userId;
-    protected Date sentDate;
+    protected Date sentDate = null;
     protected List<OrderItem> items;
     private String notes;
 
@@ -23,7 +23,7 @@ public class Order {
 
     public void add(Product product, int quantity, String notes, String discount) {
         if (!has(product)) {
-            OrderItem item = new OrderItem(product.getId(), quantity, notes, discount);
+            OrderItem item = new OrderItem(product, quantity, notes, discount);
             items.add(item);
         }
     }
@@ -34,7 +34,7 @@ public class Order {
 
     protected OrderItem getByProduct(Product product) {
         for (OrderItem item : items) {
-            if(item.getProductId() == product.getId()) {
+            if(item.getProduct().getId() == product.getId()) {
                 return item;
             }
         }
