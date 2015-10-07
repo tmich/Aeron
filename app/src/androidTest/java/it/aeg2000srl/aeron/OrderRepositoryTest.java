@@ -4,6 +4,7 @@ import android.test.AndroidTestCase;
 
 import it.aeg2000srl.aeron.core.Customer;
 import it.aeg2000srl.aeron.core.Order;
+import it.aeg2000srl.aeron.core.OrderItem;
 import it.aeg2000srl.aeron.core.Product;
 import it.aeg2000srl.aeron.repositories.CustomerRepository;
 import it.aeg2000srl.aeron.repositories.OrderRepository;
@@ -23,9 +24,9 @@ public class OrderRepositoryTest extends AndroidTestCase {
         CustomerRepository customerRepository = new CustomerRepository();
         Customer customer = customerRepository.getAll().get(0);
         ProductRepository productRepository = new ProductRepository();
-        Product p1 = productRepository.getAll().get(1);
-        Product p3 = productRepository.getAll().get(3);
-        Product p5 = productRepository.getAll().get(5);
+        Product p1 = productRepository.findById(1);
+        Product p3 = productRepository.findById(3);
+        Product p5 = productRepository.findById(8);
 
         Order order = new Order(customer);
         order.add(p1, 3, "prova 1", null);
@@ -35,5 +36,9 @@ public class OrderRepositoryTest extends AndroidTestCase {
         OrderRepository orderRepository = new OrderRepository();
         long orderId = orderRepository.add(order);
         assertEquals(orderRepository.findById(orderId).getItems().size(), 3);
+
+        for(OrderItem item : orderRepository.findById(orderId).getItems()) {
+            assertTrue(item.getProductId() == 1 || item.getProductId() == 3 || item.getProductId() == 8);
+        }
     }
 }

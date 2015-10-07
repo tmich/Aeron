@@ -1,6 +1,7 @@
 package it.aeg2000srl.aeron.views;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -11,6 +12,8 @@ import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 import org.json.JSONArray;
@@ -36,6 +39,7 @@ public class ProductsActivity extends AppCompatActivity implements SearchView.On
     ProgressDialog barProgressDialog;
     Handler updateBarHandler;
     protected ProductRepository repo;
+    int requestCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,36 @@ public class ProductsActivity extends AppCompatActivity implements SearchView.On
         setContentView(R.layout.activity_products);
         productsList = (ListView)findViewById(R.id.productsList);
         productsList.setEmptyView(findViewById(R.id.empty_list));
+
+        if(getIntent() != null) {
+            Intent intent = getIntent();
+            if(intent.getAction() != null) {
+                if (intent.getAction().equals(getString(R.string.PICK_PRODUCT))) {
+                    productsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            final Product product = getProductsAdapter().getItem(i);
+                            final OrderItemDialog dialog = new OrderItemDialog(ProductsActivity.this);
+                            dialog.setProductName(product.getName());
+                            dialog.setOnOkListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent returnIntent = new Intent();
+                                    returnIntent.putExtra(getString(R.string.productId), product.getId());
+                                    returnIntent.putExtra(getString(R.string.quantity), dialog.getQuantity());
+                                    returnIntent.putExtra(getString(R.string.notes), dialog.getNotes());
+                                    returnIntent.putExtra(getString(R.string.discount), dialog.getDiscount());
+                                    dialog.dismiss();
+                                    setResult(RESULT_OK, returnIntent);
+                                    finish();
+                                }
+                            });
+                            dialog.show();
+                        }
+                    });
+                }
+            }
+        }
     }
 
     @Override
@@ -130,7 +164,7 @@ public class ProductsActivity extends AppCompatActivity implements SearchView.On
 
         public DownloadProductsService(Handler handler) {
             this.handler = handler;
-            showMessage("Prima - Sono presenti " + repo.size() + " prodotti");
+//            showMessage("Prima - Sono presenti " + repo.size() + " prodotti");
         }
 
         @Override
@@ -186,7 +220,7 @@ public class ProductsActivity extends AppCompatActivity implements SearchView.On
 
         protected void onPostExecute(Integer result) {
             if(exception == null) {
-                showMessage("ok: " + result);
+//                showMessage("ok: " + result);
 
                 getProductsAdapter().addAll(repo.getAll());
                 getProductsAdapter().notifyDataSetChanged();

@@ -5,22 +5,25 @@ package it.aeg2000srl.aeron.core;
  */
 public class OrderItem {
     protected long id;
-    protected Product product;
+//    protected Product product;
+    protected long product_id;
+    protected String product_name;
     protected int quantity;
     protected String discount;
     protected String notes;
     protected Order order;
 
-    public OrderItem(Product product, int quantity) {
-        this(product, quantity, null, null);
+    public OrderItem(long productId, int quantity) {
+        this(productId, quantity, null, null);
     }
 
-    public OrderItem(Product product, int quantity, String notes) {
-        this(product, quantity, notes, null);
+    public OrderItem(long productId, int quantity, String notes) {
+        this(productId, quantity, notes, null);
     }
 
-    public OrderItem(Product product, int quantity, String notes, String discount) {
-        this.product = product;
+    public OrderItem(long productId, int quantity, String notes, String discount) {
+//        this.product = product;
+        this.product_id = productId;
         this.quantity = quantity;
         this.notes = notes;
         this.discount = discount;
@@ -58,11 +61,27 @@ public class OrderItem {
         this.notes = notes;
     }
 
-    public Product getProduct() {
-        return product;
+//    public Product getProduct() {
+//        return product;
+//    }
+
+    public long getProductId() {
+        return product_id;
+    }
+
+    public void setProductId(long productId) {
+        this.product_id = productId;
     }
 
     public Order getOrder() { return order; }
 
     public void setOrder(Order order) { this.order = order; }
+
+    public String getProductName() {
+        return product_name;
+    }
+
+    public void setProductName(String productName) {
+        product_name = productName;
+    }
 }

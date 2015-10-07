@@ -2,6 +2,8 @@ package it.aeg2000srl.aeron;
 
 import android.test.AndroidTestCase;
 
+import java.util.Date;
+
 import it.aeg2000srl.aeron.core.Customer;
 import it.aeg2000srl.aeron.core.Order;
 import it.aeg2000srl.aeron.core.Product;
@@ -36,5 +38,11 @@ public class OrderTest extends AndroidTestCase {
         o.add(p1, 1, "NOOOO", null);
 
         assertEquals(o.getItems().size(), 2);
+    }
+
+    public void testNewOrderShouldHaveNullSentDate() {
+        Customer c = new Customer("PROVONA", "via della provona", "VENEZIA");
+        Order o = new Order(c);
+        assertFalse(o.hasBeenSent());
     }
 }

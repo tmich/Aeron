@@ -50,7 +50,7 @@ public class CustomerRepositoryTest extends AndroidTestCase {
         int bulk_n = 500;
         ArrayList<Customer> bulk = new ArrayList<>();
         for (int i=0; i<bulk_n; i++) {
-            Customer customer = new Customer("Test Product Bulk save n." + i, UUID.randomUUID().toString().substring(0, 5), "Roma");
+            Customer customer = new Customer("Test Customer Bulk save n." + i, UUID.randomUUID().toString().substring(0, 5), "Roma");
             customer.setProvince(rnd.substring(5, 7));
             customer.setTelephone(rnd.substring(4, 9));
             customer.setIva(rnd.substring(2, 13));

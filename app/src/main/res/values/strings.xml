@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Aeron</string>
+    <string name="app_name">AEG2000 Agent</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Impostazioni</string>
@@ -11,4 +11,17 @@
     <string name="title_activity_update_data">Aggiornamento dati</string>
     <string name="title_activity_update_customers">Aggiornamento clienti</string>
     <string name="title_activity_update_products">Aggiornamento prodotti</string>
+    <string name="title_activity_order">Ordine</string>
+
+    <string name="customerId">customerId</string>
+    <string name="orderId">orderId</string>
+    <string name="actionNewOrder">NEW_ORDER</string>
+    <string name="quantity">qta</string>
+    <string name="notes">note</string>
+    <string name="discount">sconto</string>
+    <string name="productId">productId</string>
+    <string name="PICK_PRODUCT">pickProduct</string>
+    <string name="action_save">salva</string>
+    <string name="title_activity_customer_details">CustomerDetailsActivity</string>
+    <string name="delete">Elimina</string>
 </resources>

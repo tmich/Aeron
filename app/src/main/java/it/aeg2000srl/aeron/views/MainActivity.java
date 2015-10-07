@@ -7,18 +7,33 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import it.aeg2000srl.aeron.R;
+import it.aeg2000srl.aeron.core.Order;
+import it.aeg2000srl.aeron.services.UseCasesService;
+import it.aeg2000srl.aeron.views.adapters.OrdersArrayAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
     Button btnGoToProducts;
     Button btnGoToCustomers;
+    ListView lstWaitingOrders;
+    UseCasesService useCasesService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        useCasesService = new UseCasesService();
+
+        lstWaitingOrders = (ListView)findViewById(R.id.lstWaitingOrders);
+        lstWaitingOrders.setEmptyView(findViewById(R.id.empty_list));
+        lstWaitingOrders.setAdapter(new OrdersArrayAdapter(this, R.layout.orders_waiting, new ArrayList<Order>()));
 
         btnGoToProducts = (Button)findViewById(R.id.goToProducts);
         btnGoToProducts.setOnClickListener(new View.OnClickListener() {
@@ -37,6 +52,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(goToCustomersIntent);
             }
         });
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        ((OrdersArrayAdapter) lstWaitingOrders.getAdapter()).addAll(useCasesService.getWaitingOrders());
+        ((OrdersArrayAdapter) lstWaitingOrders.getAdapter()).notifyDataSetChanged();
     }
 
     @Override

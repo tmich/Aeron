@@ -1,6 +1,7 @@
 package it.aeg2000srl.aeron.views;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -11,6 +12,8 @@ import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -54,7 +57,16 @@ public class CustomersActivity extends AppCompatActivity implements SearchView.O
         super.onPostCreate(savedInstanceState);
         // TODO: service layer
         repo = new CustomerRepository();
-        customersList.setAdapter(new CustomersArrayAdapter(this, repo.getAll()));
+        customersList.setAdapter(new CustomersArrayAdapter(this, repo.getAll().subList(0, 50)));
+        customersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(CustomersActivity.this, OrderActivity.class);
+                intent.setAction(getString(R.string.actionNewOrder));
+                intent.putExtra(getString(R.string.customerId), getCustomersAdapter().getItem(i).getId());
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -134,7 +146,7 @@ public class CustomersActivity extends AppCompatActivity implements SearchView.O
 
         public DownloadCustomersService(Handler handler) {
             this.handler = handler;
-            showMessage("Prima - Sono presenti " + repo.size() + " clienti");
+//            showMessage("Prima - Sono presenti " + repo.size() + " clienti");
         }
 
         @Override
@@ -191,7 +203,7 @@ public class CustomersActivity extends AppCompatActivity implements SearchView.O
 
         protected void onPostExecute(Integer result) {
             if(exception == null) {
-                showMessage("ok: " + result);
+//                showMessage("ok: " + result);
 
                 getCustomersAdapter().addAll(repo.getAll());
                 getCustomersAdapter().notifyDataSetChanged();

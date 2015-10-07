@@ -1,5 +1,6 @@
 package it.aeg2000srl.aeron.repositories;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.aeg2000srl.aeron.core.Order;
@@ -22,18 +23,59 @@ public class OrderRepository implements IRepository<Order> {
         fact = new OrderFactory();
     }
 
+    protected OrderItem makeOrderItem(EOrderItem entity) {
+        OrderItem orderItem = new OrderItem(entity.eProduct.getId(), entity.quantity);
+        orderItem.setDiscount(entity.discount);
+        orderItem.setNotes(entity.notes);
+
+        return orderItem;
+    }
+
     @Override
     public Order findById(long id) {
         Order order = fact.from(EOrder.findById(EOrder.class, id)).make();
 
-        List<EOrderItem> items = EOrderItem.find(EOrderItem.class, "e_order = ?", String.valueOf(id));
-        OrderItemFactory orderItemFactory = new OrderItemFactory();
+//        try {
+            List<EOrderItem> items = EOrderItem.find(EOrderItem.class, "e_order = ?", String.valueOf(id));
+//        OrderItemFactory orderItemFactory = new OrderItemFactory();
 
-        for (EOrderItem item : items) {
-            order.getItems().add(orderItemFactory.from(item).make());
+            // aggiunge gli items
+            for (EOrderItem entity : items) {
+//            order.getItems().add(orderItemFactory.from(item).make());
+                OrderItem orderItem = makeOrderItem(entity);
+                orderItem.setOrder(order);
+                order.getItems().add(orderItem);
+            }
+
+            return order;
+//        } catch (NullPointerException exc) {
+//            //remove(order);
+//            EOrder.findById(EOrder.class, id).delete();
+//        }
+
+//        return null;
+    }
+
+    public List<Order> findByCustomerId(long customerId) {
+        List<Order> orders = new ArrayList<>();
+        List<EOrder> entities = EOrder.find(EOrder.class, "customer = ?", String.valueOf(customerId));
+
+        for (EOrder entity : entities) {
+            orders.add(findById(entity.getId()));
         }
 
-        return order;
+        return orders;
+    }
+
+    public List<Order> getNotSent() {
+        List<Order> orders = new ArrayList<>();
+        List<EOrder> entities = EOrder.find(EOrder.class, "sent_date = ?", String.valueOf(0));
+
+        for (EOrder entity : entities) {
+            orders.add(findById(entity.getId()));
+        }
+
+        return orders;
     }
 
     @Override

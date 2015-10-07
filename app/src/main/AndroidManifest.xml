@@ -33,6 +33,14 @@
             android:name=".views.CustomersActivity"
             android:label="@string/title_activity_customers" >
         </activity>
+        <activity
+            android:name=".views.OrderActivity"
+            android:label="@string/title_activity_order" >
+        </activity>
+        <activity
+            android:name=".views.CustomerDetailsActivity"
+            android:label="@string/title_activity_customer_details" >
+        </activity>
     </application>
 
 </manifest>

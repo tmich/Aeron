@@ -9,32 +9,54 @@ import java.util.List;
  */
 public class Order {
     protected long id;
-    protected Customer customer;
+    protected long customerId;
     protected Date creationDate = null;
-//    protected long userId;
     protected Date sentDate = null;
     protected List<OrderItem> items;
     private String notes;
 
     public Order(Customer owner) {
-        customer = owner;
+        setCustomerId(owner.getId());
         items = new ArrayList<>();
+        creationDate = new Date();
+        sentDate = new Date(0);
+    }
+
+    public boolean hasBeenSent() {
+        return !sentDate.equals(new Date(0));
+    }
+
+    public void add(OrderItem orderItem) {
+        if (getByProductId(orderItem.getProductId()) == null) {
+            items.add(orderItem);
+        }
     }
 
     public void add(Product product, int quantity, String notes, String discount) {
         if (!has(product)) {
-            OrderItem item = new OrderItem(product, quantity, notes, discount);
+            OrderItem item = new OrderItem(product.getId(), quantity, notes, discount);
+            item.setProductName(product.getName());
             items.add(item);
         }
     }
 
-    public void remove(Product product) {
-        items.remove(getByProduct(product));
+    public void remove(OrderItem item) {
+        items.remove(getByProductId(item.getProductId()));
     }
 
     protected OrderItem getByProduct(Product product) {
         for (OrderItem item : items) {
-            if(item.getProduct().getId() == product.getId()) {
+            if(item.getProductId() == product.getId()) {
+                return item;
+            }
+        }
+
+        return null;
+    }
+
+    protected OrderItem getByProductId(long productId) {
+        for (OrderItem item : items) {
+            if(item.getProductId() == productId) {
                 return item;
             }
         }
@@ -58,13 +80,13 @@ public class Order {
         this.id = id;
     }
 
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
+//    public Customer getCustomer() {
+//        return customer;
+//    }
+//
+//    public void setCustomer(Customer customer) {
+//        this.customer = customer;
+//    }
 
     public Date getCreationDate() {
         return creationDate;
@@ -88,5 +110,13 @@ public class Order {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(long customerId) {
+        this.customerId = customerId;
     }
 }
