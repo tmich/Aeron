@@ -24,4 +24,10 @@
     <string name="action_save">salva</string>
     <string name="title_activity_customer_details">CustomerDetailsActivity</string>
     <string name="delete">Elimina</string>
+    <string name="action_send">Invia</string>
+    <string name="title_activity_orders_history">OrdersHistoryActivity</string>
+    <string name="new_order">Nuovo ordine</string>
+    <string name="cart">Carrello: 0</string>
+    <string name="waiting_orders">Ordini in attesa</string>
+    <string name="title_activity_waiting_orders">WaitingOrdersActivity</string>
 </resources>

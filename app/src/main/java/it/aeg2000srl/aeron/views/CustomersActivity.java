@@ -10,6 +10,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,12 +58,26 @@ public class CustomersActivity extends AppCompatActivity implements SearchView.O
         super.onPostCreate(savedInstanceState);
         // TODO: service layer
         repo = new CustomerRepository();
-        customersList.setAdapter(new CustomersArrayAdapter(this, repo.getAll().subList(0, 50)));
+
+        customersList.setAdapter(new CustomersArrayAdapter(this, repo.getAll()));
+        Log.d("aeron", this.getClass().getCanonicalName() + " onPostCreate ");
+
+        // creazione nuovo ordine
+//        customersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                Intent intent = new Intent(CustomersActivity.this, OrderActivity.class);
+//                intent.setAction(getString(R.string.actionNewOrder));
+//                intent.putExtra(getString(R.string.customerId), getCustomersAdapter().getItem(i).getId());
+//                startActivity(intent);
+//            }
+//        });
+
+        // scheda cliente
         customersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(CustomersActivity.this, OrderActivity.class);
-                intent.setAction(getString(R.string.actionNewOrder));
+                Intent intent = new Intent(CustomersActivity.this, CustomerDetailsActivity.class);
                 intent.putExtra(getString(R.string.customerId), getCustomersAdapter().getItem(i).getId());
                 startActivity(intent);
             }

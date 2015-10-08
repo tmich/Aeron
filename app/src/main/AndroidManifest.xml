@@ -41,6 +41,14 @@
             android:name=".views.CustomerDetailsActivity"
             android:label="@string/title_activity_customer_details" >
         </activity>
+        <activity
+            android:name=".views.OrdersHistoryActivity"
+            android:label="@string/title_activity_orders_history" >
+        </activity>
+        <activity
+            android:name=".views.WaitingOrdersActivity"
+            android:label="@string/title_activity_waiting_orders" >
+        </activity>
     </application>
 
 </manifest>

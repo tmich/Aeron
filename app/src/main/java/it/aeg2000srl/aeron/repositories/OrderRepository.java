@@ -118,4 +118,26 @@ public class OrderRepository implements IRepository<Order> {
     public void addAll(List<Order> items) {
 
     }
+
+    public List<Order> findSentByCustomerId(long customerId) {
+        List<Order> orders = new ArrayList<>();
+        List<EOrder> entities = EOrder.find(EOrder.class, "customer = ? and sent_date <> ?", String.valueOf(customerId), String.valueOf(0));
+
+        for (EOrder entity : entities) {
+            orders.add(findById(entity.getId()));
+        }
+
+        return orders;
+    }
+
+    public List<Order> findNotSentByCustomerId(long customerId) {
+        List<Order> orders = new ArrayList<>();
+        List<EOrder> entities = EOrder.find(EOrder.class, "customer = ? and sent_date = 0", String.valueOf(customerId));
+
+        for (EOrder entity : entities) {
+            orders.add(findById(entity.getId()));
+        }
+
+        return orders;
+    }
 }

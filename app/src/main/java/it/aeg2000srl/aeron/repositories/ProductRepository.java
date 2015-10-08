@@ -6,6 +6,8 @@ import com.orm.query.Select;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.aeg2000srl.aeron.core.Order;
+import it.aeg2000srl.aeron.core.OrderItem;
 import it.aeg2000srl.aeron.core.Product;
 import it.aeg2000srl.aeron.entities.EProduct;
 import it.aeg2000srl.aeron.factories.ProductFactory;
@@ -99,5 +101,23 @@ public class ProductRepository implements IRepository<Product> {
         }
 
         EProduct.saveInTx(entities);
+    }
+
+    public List<Product> getMostOrderedByCustomerId(long customerId) {
+        ArrayList<Product> products = new ArrayList<>();
+        OrderRepository orderRepository = new OrderRepository();
+        List<Order> orders = orderRepository.findSentByCustomerId(customerId);
+
+        for (Order order : orders) {
+            for (OrderItem item : order.getItems()) {
+                EProduct entity = EProduct.findById(EProduct.class, item.getProductId());
+                Product fav = fact.from(entity).make();
+                if (!products.contains(fav)) {
+                    products.add(fav);
+                }
+            }
+        }
+
+        return products;
     }
 }

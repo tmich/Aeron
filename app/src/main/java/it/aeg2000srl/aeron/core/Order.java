@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by tiziano.michelessi on 06/10/2015.
  */
-public class Order {
+public class Order implements IOrder {
     protected long id;
     protected long customerId;
     protected Date creationDate = null;
@@ -32,6 +32,7 @@ public class Order {
         }
     }
 
+    @Override
     public void add(Product product, int quantity, String notes, String discount) {
         if (!has(product)) {
             OrderItem item = new OrderItem(product.getId(), quantity, notes, discount);
@@ -40,6 +41,7 @@ public class Order {
         }
     }
 
+    @Override
     public void remove(OrderItem item) {
         items.remove(getByProductId(item.getProductId()));
     }
@@ -64,6 +66,7 @@ public class Order {
         return null;
     }
 
+    @Override
     public List<OrderItem> getItems() {
         return items;
     }
@@ -112,6 +115,7 @@ public class Order {
         this.notes = notes;
     }
 
+    @Override
     public long getCustomerId() {
         return customerId;
     }

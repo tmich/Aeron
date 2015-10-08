@@ -31,9 +31,9 @@ public class MainActivity extends AppCompatActivity {
 
         useCasesService = new UseCasesService();
 
-        lstWaitingOrders = (ListView)findViewById(R.id.lstWaitingOrders);
-        lstWaitingOrders.setEmptyView(findViewById(R.id.empty_list));
-        lstWaitingOrders.setAdapter(new OrdersArrayAdapter(this, R.layout.orders_waiting, new ArrayList<Order>()));
+//        lstWaitingOrders = (ListView)findViewById(R.id.lstWaitingOrders);
+//        lstWaitingOrders.setEmptyView(findViewById(R.id.empty_list));
+//        lstWaitingOrders.setAdapter(new OrdersArrayAdapter(this, R.layout.orders_waiting, new ArrayList<Order>()));
 
         btnGoToProducts = (Button)findViewById(R.id.goToProducts);
         btnGoToProducts.setOnClickListener(new View.OnClickListener() {
@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        ((OrdersArrayAdapter) lstWaitingOrders.getAdapter()).addAll(useCasesService.getWaitingOrders());
-        ((OrdersArrayAdapter) lstWaitingOrders.getAdapter()).notifyDataSetChanged();
+//        ((OrdersArrayAdapter) lstWaitingOrders.getAdapter()).addAll(useCasesService.getWaitingOrders());
+//        ((OrdersArrayAdapter) lstWaitingOrders.getAdapter()).notifyDataSetChanged();
     }
 
     @Override

@@ -51,4 +51,13 @@ public class Product {
     public String toString() {
         return this.getName();
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null) return false;
+        if (other == this) return true;
+        if (!(other instanceof Product)) return false;
+        Product otherProduct = (Product)other;
+        return id == otherProduct.getId();
+    }
 }

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import it.aeg2000srl.aeron.R;
+import it.aeg2000srl.aeron.core.Customer;
 import it.aeg2000srl.aeron.core.Order;
 import it.aeg2000srl.aeron.repositories.CustomerRepository;
 
@@ -20,10 +21,12 @@ import it.aeg2000srl.aeron.repositories.CustomerRepository;
 public class OrdersArrayAdapter extends ArrayAdapter<Order> {
     private final Activity context;
     private final List<Order> orders;
+    int resourceId;
 
     public OrdersArrayAdapter(Activity context, int resource, List<Order> objects) {
         super(context, resource, objects);
         this.context = context;
+        this.resourceId = resource;
         orders = objects;
     }
 
@@ -45,7 +48,7 @@ public class OrdersArrayAdapter extends ArrayAdapter<Order> {
         View rowView = convertView;
         if (rowView == null) {
             LayoutInflater inflater = context.getLayoutInflater();
-            rowView = inflater.inflate(R.layout.order_items, null, true);
+            rowView = inflater.inflate(resourceId, null, true);
             holder = new ViewHolder();
             holder.txtCustomerName = (TextView) rowView.findViewById(R.id.txtCustomerName);
             rowView.setTag(holder);
@@ -56,7 +59,12 @@ public class OrdersArrayAdapter extends ArrayAdapter<Order> {
         Order order = orders.get(position);
         if(order != null) {
             CustomerRepository customerRepository = new CustomerRepository();
-            holder.txtCustomerName.setText(customerRepository.findById(order.getCustomerId()).getName());
+            Customer customer = customerRepository.findById(order.getCustomerId());
+            if (customer != null) {
+                holder.txtCustomerName.setText(customer.getName());
+            } else {
+                holder.txtCustomerName.setText("N.D.");
+            }
         }
         return rowView;
     }

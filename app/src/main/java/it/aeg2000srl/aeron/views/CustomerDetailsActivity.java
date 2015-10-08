@@ -5,11 +5,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import it.aeg2000srl.aeron.R;
 import it.aeg2000srl.aeron.core.Customer;
+import it.aeg2000srl.aeron.core.FavoriteProduct;
 import it.aeg2000srl.aeron.repositories.CustomerRepository;
+import it.aeg2000srl.aeron.services.UseCasesService;
+import it.aeg2000srl.aeron.views.adapters.FavoriteProductsArrayAdapter;
 
 public class CustomerDetailsActivity extends AppCompatActivity {
     Customer customer;
@@ -17,6 +27,10 @@ public class CustomerDetailsActivity extends AppCompatActivity {
     TextView lblCustomerName;
     TextView lblCustomerAddress;
     TextView lblCustomerCity;
+    Button btnNewOrder;
+    Button btnWaitingOrders;
+    ListView lstFavorites;
+    UseCasesService service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,19 +40,77 @@ public class CustomerDetailsActivity extends AppCompatActivity {
         lblCustomerName = (TextView)findViewById(R.id.lblCustomerName);
         lblCustomerAddress = (TextView)findViewById(R.id.lblCustomerAddress);
         lblCustomerCity = (TextView)findViewById(R.id.lblCustomerCity);
+        btnNewOrder = (Button)findViewById(R.id.btnNewOrder);
+        btnWaitingOrders = (Button)findViewById(R.id.btnWaitingOrders);
+        lstFavorites = (ListView)findViewById(R.id.lstFavorites);
+        service = new UseCasesService();
 
         if (getIntent() != null) {
             Intent intent = getIntent();
             long customerId = intent.getLongExtra(getString(R.string.customerId), 0);
             customer = customerRepository.findById(customerId);
             update();
+        } else {
+            finish();
         }
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        // creazione nuovo ordine
+        btnNewOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CustomerDetailsActivity.this, OrderActivity.class);
+                intent.setAction(getString(R.string.actionNewOrder));
+                intent.putExtra(getString(R.string.customerId), customer.getId());
+
+                // preferiti selezionati
+                ArrayList<String> selectedCodes = new ArrayList<>();
+                for(FavoriteProduct fav : getFavoritesAdapter().getFavorites()) {
+                    if (fav.isSelected()) {
+                        selectedCodes.add(fav.getCode());
+                    }
+                }
+                intent.putStringArrayListExtra(getString(R.string.cart), selectedCodes);
+                startActivity(intent);
+            }
+        });
+
+        // ordini in attesa
+        btnWaitingOrders.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CustomerDetailsActivity.this, WaitingOrdersActivity.class);
+                intent.putExtra(getString(R.string.customerId), customer.getId());
+                startActivity(intent);
+            }
+        });
+
     }
 
     protected void update() {
         lblCustomerName.setText(customer.getName());
         lblCustomerAddress.setText(customer.getAddress());
         lblCustomerCity.setText(customer.getCity());
+
+        // lista prodotti preferiti
+        lstFavorites.setAdapter(new FavoriteProductsArrayAdapter(this, service.getFavorites(customer)));
+
+        //ordini in attesa
+        btnWaitingOrders.setEnabled(service.getWaitingOrders(customer).size() > 0);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        update();
+    }
+
+    protected FavoriteProductsArrayAdapter getFavoritesAdapter() {
+        return (FavoriteProductsArrayAdapter)lstFavorites.getAdapter();
     }
 
     @Override
