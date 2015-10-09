@@ -9,6 +9,7 @@ public class EOrderItem extends SugarRecord<EOrderItem> {
     public int quantity;
     public String discount;
     public String notes;
+    public String code;
 
     // relationship
     public EOrder eOrder;

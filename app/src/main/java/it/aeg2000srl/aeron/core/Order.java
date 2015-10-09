@@ -12,7 +12,7 @@ public class Order implements IOrder {
     protected long customerId;
     protected Date creationDate = null;
     protected Date sentDate = null;
-    protected List<OrderItem> items;
+    protected List<IOrderItem> items;
     private String notes;
 
     public Order(Customer owner) {
@@ -26,28 +26,30 @@ public class Order implements IOrder {
         return !sentDate.equals(new Date(0));
     }
 
-    public void add(OrderItem orderItem) {
+    @Override
+    public void add(IProduct product, int quantity, String notes, String discount) {
+        if (!has(product)) {
+            OrderItem item = new OrderItem(product, quantity, notes, discount);
+            item.setProductName(product.getName());
+            item.setOrder(this);
+            items.add(item);
+        }
+    }
+
+    @Override
+    public void add(IOrderItem orderItem) {
         if (getByProductId(orderItem.getProductId()) == null) {
             items.add(orderItem);
         }
     }
 
     @Override
-    public void add(Product product, int quantity, String notes, String discount) {
-        if (!has(product)) {
-            OrderItem item = new OrderItem(product.getId(), quantity, notes, discount);
-            item.setProductName(product.getName());
-            items.add(item);
-        }
-    }
-
-    @Override
-    public void remove(OrderItem item) {
+    public void remove(IOrderItem item) {
         items.remove(getByProductId(item.getProductId()));
     }
 
-    protected OrderItem getByProduct(Product product) {
-        for (OrderItem item : items) {
+    protected IOrderItem getByProduct(IProduct product) {
+        for (IOrderItem item : items) {
             if(item.getProductId() == product.getId()) {
                 return item;
             }
@@ -56,8 +58,8 @@ public class Order implements IOrder {
         return null;
     }
 
-    protected OrderItem getByProductId(long productId) {
-        for (OrderItem item : items) {
+    protected IOrderItem getByProductId(long productId) {
+        for (IOrderItem item : items) {
             if(item.getProductId() == productId) {
                 return item;
             }
@@ -67,18 +69,20 @@ public class Order implements IOrder {
     }
 
     @Override
-    public List<OrderItem> getItems() {
+    public List<IOrderItem> getItems() {
         return items;
     }
 
-    protected boolean has(Product product) {
+    protected boolean has(IProduct product) {
         return getByProduct(product) != null;
     }
 
+    @Override
     public long getId() {
         return id;
     }
 
+    @Override
     public void setId(long id) {
         this.id = id;
     }
@@ -91,26 +95,32 @@ public class Order implements IOrder {
 //        this.customer = customer;
 //    }
 
+    @Override
     public Date getCreationDate() {
         return creationDate;
     }
 
+    @Override
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
     }
 
+    @Override
     public Date getSentDate() {
         return sentDate;
     }
 
+    @Override
     public void setSentDate(Date sentDate) {
         this.sentDate = sentDate;
     }
 
+    @Override
     public String getNotes() {
         return notes;
     }
 
+    @Override
     public void setNotes(String notes) {
         this.notes = notes;
     }
@@ -120,7 +130,13 @@ public class Order implements IOrder {
         return customerId;
     }
 
+    @Override
     public void setCustomerId(long customerId) {
         this.customerId = customerId;
+    }
+
+    @Override
+    public OrderType getType() {
+        return OrderType.NORMAL;
     }
 }

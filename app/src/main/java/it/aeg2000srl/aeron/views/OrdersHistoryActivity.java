@@ -6,8 +6,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import java.util.List;
+
 import it.aeg2000srl.aeron.R;
 import it.aeg2000srl.aeron.core.Customer;
+import it.aeg2000srl.aeron.core.IOrder;
+import it.aeg2000srl.aeron.core.Order;
 import it.aeg2000srl.aeron.repositories.CustomerRepository;
 import it.aeg2000srl.aeron.services.UseCasesService;
 import it.aeg2000srl.aeron.views.adapters.OrdersArrayAdapter;
@@ -27,14 +31,25 @@ public class OrdersHistoryActivity extends AppCompatActivity {
         if (getIntent() != null) {
             CustomerRepository customerRepository = new CustomerRepository();
             long customerId = getIntent().getLongExtra(getString(R.string.customerId), 0);
-            customer = customerRepository.findById(customerId);
+            if (customerId > 0) {
+                customer = customerRepository.findById(customerId);
+            } else {
+                finish();
+            }
+        } else {
+            finish();
         }
     }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        lstSentOrders.setAdapter(new OrdersArrayAdapter(this, R.layout.orders_waiting, service.getSentOrdersByCustomer(customer)));
+        update();
+    }
+
+    private void update() {
+        List<IOrder> sentOrdersByCustomer = service.getSentOrdersByCustomer(customer);
+        lstSentOrders.setAdapter(new OrdersArrayAdapter(this, R.layout.orders_waiting, sentOrdersByCustomer));
     }
 
     @Override

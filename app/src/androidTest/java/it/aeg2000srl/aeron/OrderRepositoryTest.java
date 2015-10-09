@@ -3,6 +3,7 @@ package it.aeg2000srl.aeron;
 import android.test.AndroidTestCase;
 
 import it.aeg2000srl.aeron.core.Customer;
+import it.aeg2000srl.aeron.core.IOrderItem;
 import it.aeg2000srl.aeron.core.Order;
 import it.aeg2000srl.aeron.core.OrderItem;
 import it.aeg2000srl.aeron.core.Product;
@@ -37,7 +38,7 @@ public class OrderRepositoryTest extends AndroidTestCase {
         long orderId = orderRepository.add(order);
         assertEquals(orderRepository.findById(orderId).getItems().size(), 3);
 
-        for(OrderItem item : orderRepository.findById(orderId).getItems()) {
+        for(IOrderItem item : orderRepository.findById(orderId).getItems()) {
             assertTrue(item.getProductId() == 1 || item.getProductId() == 3 || item.getProductId() == 8);
         }
     }

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import it.aeg2000srl.aeron.core.Customer;
+import it.aeg2000srl.aeron.core.IOrder;
 import it.aeg2000srl.aeron.core.Order;
 import it.aeg2000srl.aeron.core.Product;
 import it.aeg2000srl.aeron.repositories.CustomerRepository;
@@ -42,9 +43,9 @@ public class UseCasesServiceTest extends AndroidTestCase {
         order2.add(p1, 3, "prova 1", null);
         long id2 = orderRepository.add(order2);
 
-        List<Order> orders = service.getOrdersByCustomer(customer);
+        List<IOrder> orders = service.getOrdersByCustomer(customer);
 
-        for (Order o : orders) {
+        for (IOrder o : orders) {
             assertTrue(o.getId() == id1 || o.getId() == id2);
         }
     }

@@ -1,5 +1,7 @@
 package it.aeg2000srl.aeron.factories;
 
+import it.aeg2000srl.aeron.core.IOrderItem;
+import it.aeg2000srl.aeron.core.IProduct;
 import it.aeg2000srl.aeron.core.OrderItem;
 import it.aeg2000srl.aeron.core.Product;
 import it.aeg2000srl.aeron.entities.EOrderItem;
@@ -11,7 +13,7 @@ import it.aeg2000srl.aeron.entities.EProduct;
 public class OrderItemFactory implements IFactory<EOrderItem, OrderItem> {
     EOrderItem entity;
 
-    public static EOrderItem toEntity(OrderItem orderItem) {
+    public static EOrderItem toEntity(IOrderItem orderItem) {
         EOrderItem entity = new EOrderItem();
         entity.setId(orderItem.getId() != 0 ? orderItem.getId() : null);
         entity.eProduct = new EProduct();
@@ -19,6 +21,7 @@ public class OrderItemFactory implements IFactory<EOrderItem, OrderItem> {
         entity.discount = orderItem.getDiscount();
         entity.quantity = orderItem.getQuantity();
         entity.notes = orderItem.getNotes();
+        entity.code = orderItem.getProductCode();
         //entity.eOrder = OrderFactory.toEntity(orderItem.getOrder());
         return entity;
     }
@@ -32,9 +35,9 @@ public class OrderItemFactory implements IFactory<EOrderItem, OrderItem> {
     @Override
     public OrderItem make() {
         ProductFactory productFactory = new ProductFactory();
-        Product product = productFactory.from(entity.eProduct).make();
+        IProduct product = productFactory.from(entity.eProduct).make();
         OrderFactory orderFactory = new OrderFactory();
-        OrderItem orderItem = new OrderItem(product.getId(), entity.quantity, entity.notes, entity.discount);
+        OrderItem orderItem = new OrderItem(product, entity.quantity, entity.notes, entity.discount);
         orderItem.setOrder(orderFactory.from(entity.eOrder).make());
         return orderItem;
     }

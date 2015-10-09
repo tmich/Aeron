@@ -36,10 +36,16 @@
             android:text="@string/new_order"/>
 
         <Button
-            android:id="@+id/btnWaitingOrders"
+            android:id="@+id/btnNewOrderIcewer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/waiting_orders"/>
+            android:text="@string/new_order_icewer"/>
+
+        <!--<Button-->
+            <!--android:id="@+id/btnWaitingOrders"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/waiting_orders"/>-->
 
     </LinearLayout>
 

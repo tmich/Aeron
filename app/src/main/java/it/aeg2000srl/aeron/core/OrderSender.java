@@ -91,7 +91,7 @@ public class OrderSender extends AsyncTask<String, Integer, Integer> implements 
             json.put("customer_id", order.getCustomerId());
             JSONArray voci = new JSONArray();
 
-            for(OrderItem orderItem : order.getItems()) {
+            for(IOrderItem orderItem : order.getItems()) {
                 JSONObject obj = new JSONObject();
                 obj.put("product_id", orderItem.getProductId());
                 obj.put("qty", orderItem.getQuantity());

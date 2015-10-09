@@ -28,6 +28,7 @@ public class ProductsArrayAdapter extends ArrayAdapter<Product> {
     static class ViewHolder {
         public TextView textView;
         public TextView idView;
+        public TextView priceView;
     }
 
     @Override
@@ -45,6 +46,7 @@ public class ProductsArrayAdapter extends ArrayAdapter<Product> {
             rowView = inflater.inflate(R.layout.products, null, true);
             holder = new ViewHolder();
             holder.textView = (TextView) rowView.findViewById(R.id.txtName);
+            holder.priceView = (TextView) rowView.findViewById(R.id.txtPrice);
 //            holder.idView = (TextView) rowView.findViewById(R.id.txtId);
             rowView.setTag(holder);
         } else {
@@ -52,6 +54,7 @@ public class ProductsArrayAdapter extends ArrayAdapter<Product> {
         }
 
         holder.textView.setText(products.get(position).getName());
+        holder.priceView.setText(String.valueOf(products.get(position).getPrice()));
 //        holder.idView.setText(String.valueOf(products.get(position).getId()));
         return rowView;
     }

@@ -8,22 +8,25 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import it.aeg2000srl.aeron.R;
 import it.aeg2000srl.aeron.core.Customer;
+import it.aeg2000srl.aeron.core.IOrder;
 import it.aeg2000srl.aeron.core.Order;
 import it.aeg2000srl.aeron.repositories.CustomerRepository;
 
 /**
  * Created by tiziano.michelessi on 07/10/2015.
  */
-public class OrdersArrayAdapter extends ArrayAdapter<Order> {
+public class OrdersArrayAdapter extends ArrayAdapter<IOrder> {
     private final Activity context;
-    private final List<Order> orders;
+    private final List<IOrder> orders;
     int resourceId;
 
-    public OrdersArrayAdapter(Activity context, int resource, List<Order> objects) {
+    public OrdersArrayAdapter(Activity context, int resource, List<IOrder> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resourceId = resource;
@@ -33,7 +36,7 @@ public class OrdersArrayAdapter extends ArrayAdapter<Order> {
     // static to save the reference to the outer class and to avoid access to
     // any members of the containing class
     static class ViewHolder {
-        public TextView txtCustomerName;
+        public TextView txtDescription;
     }
 
     @Override
@@ -50,21 +53,23 @@ public class OrdersArrayAdapter extends ArrayAdapter<Order> {
             LayoutInflater inflater = context.getLayoutInflater();
             rowView = inflater.inflate(resourceId, null, true);
             holder = new ViewHolder();
-            holder.txtCustomerName = (TextView) rowView.findViewById(R.id.txtCustomerName);
+            //holder.txtCustomerName = (TextView) rowView.findViewById(R.id.txtCustomerName);
+            holder.txtDescription = (TextView) rowView.findViewById(R.id.txtDescription);
             rowView.setTag(holder);
         } else {
             holder = (ViewHolder) rowView.getTag();
         }
 
-        Order order = orders.get(position);
+        IOrder order = orders.get(position);
         if(order != null) {
-            CustomerRepository customerRepository = new CustomerRepository();
-            Customer customer = customerRepository.findById(order.getCustomerId());
-            if (customer != null) {
-                holder.txtCustomerName.setText(customer.getName());
-            } else {
-                holder.txtCustomerName.setText("N.D.");
-            }
+//            CustomerRepository customerRepository = new CustomerRepository();
+//            Customer customer = customerRepository.findById(order.getCustomerId());
+//            if (customer != null) {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy H:m", Locale.ITALY);
+                holder.txtDescription.setText("Ordine n." + order.getId() + " del " + simpleDateFormat.format(order.getCreationDate()));
+//            } else {
+//                holder.txtDescription.setText("");
+//            }
         }
         return rowView;
     }

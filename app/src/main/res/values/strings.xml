@@ -22,12 +22,16 @@
     <string name="productId">productId</string>
     <string name="PICK_PRODUCT">pickProduct</string>
     <string name="action_save">salva</string>
-    <string name="title_activity_customer_details">CustomerDetailsActivity</string>
+    <string name="title_activity_customer_details">Scheda cliente</string>
     <string name="delete">Elimina</string>
     <string name="action_send">Invia</string>
-    <string name="title_activity_orders_history">OrdersHistoryActivity</string>
+    <string name="title_activity_orders_history">Storico Ordini</string>
     <string name="new_order">Nuovo ordine</string>
     <string name="cart">Carrello: 0</string>
     <string name="waiting_orders">Ordini in attesa</string>
-    <string name="title_activity_waiting_orders">WaitingOrdersActivity</string>
+    <string name="title_activity_waiting_orders">Ordini in attesa</string>
+    <string name="productCode">product_code</string>
+    <string name="actionEditOrder">EDIT_ORDER</string>
+    <string name="new_order_icewer">Nuovo Icewer</string>
+    <string name="title_activity_orders_icewer">Ordine Icewer</string>
 </resources>

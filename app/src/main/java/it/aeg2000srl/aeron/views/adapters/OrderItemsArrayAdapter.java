@@ -15,16 +15,17 @@ import android.widget.Toast;
 import java.util.List;
 
 import it.aeg2000srl.aeron.R;
+import it.aeg2000srl.aeron.core.IOrderItem;
 import it.aeg2000srl.aeron.core.OrderItem;
 
 /**
  * Created by tiziano.michelessi on 07/10/2015.
  */
-public class OrderItemsArrayAdapter extends ArrayAdapter<OrderItem> {
+public class OrderItemsArrayAdapter extends ArrayAdapter<IOrderItem> {
     private final Activity context;
-    private final List<OrderItem> items;
+    private final List<IOrderItem> items;
 
-    public OrderItemsArrayAdapter(Activity context, List<OrderItem> items) {
+    public OrderItemsArrayAdapter(Activity context, List<IOrderItem> items) {
         super(context, R.layout.order_items, items);
         this.context = context;
         this.items = items;
@@ -60,7 +61,7 @@ public class OrderItemsArrayAdapter extends ArrayAdapter<OrderItem> {
             holder = (ViewHolder) rowView.getTag();
         }
 
-        OrderItem item = items.get(position);
+        IOrderItem item = items.get(position);
         holder.txtProductName.setText(item.getProductName());
         holder.txtQty.setText(String.valueOf(item.getQuantity()));
 //        holder.btnDeleteItem.setTag(item);

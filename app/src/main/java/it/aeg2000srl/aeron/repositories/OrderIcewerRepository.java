@@ -5,9 +5,8 @@ import java.util.List;
 
 import it.aeg2000srl.aeron.core.IOrder;
 import it.aeg2000srl.aeron.core.IOrderItem;
-import it.aeg2000srl.aeron.core.IProduct;
-import it.aeg2000srl.aeron.core.Order;
 import it.aeg2000srl.aeron.core.OrderItem;
+import it.aeg2000srl.aeron.core.OrderItemIcewer;
 import it.aeg2000srl.aeron.entities.EOrder;
 import it.aeg2000srl.aeron.entities.EOrderItem;
 import it.aeg2000srl.aeron.factories.OrderFactory;
@@ -16,22 +15,19 @@ import it.aeg2000srl.aeron.factories.OrderItemFactory;
 /**
  * Created by tiziano.michelessi on 06/10/2015.
  */
-public class OrderRepository implements IRepository<IOrder> {
+public class OrderIcewerRepository implements IRepository<IOrder> {
     OrderFactory fact;
 
-    public OrderRepository() {
+    public OrderIcewerRepository() {
         fact = new OrderFactory();
     }
 
-    protected OrderItem makeOrderItem(EOrderItem entity) {
-        ProductRepository productRepository = new ProductRepository();
-        IProduct product = productRepository.findById(entity.eProduct.getId());
-        OrderItem orderItem = new OrderItem(product, entity.quantity);
+    protected OrderItemIcewer makeOrderItem(EOrderItem entity) {
+        OrderItemIcewer orderItem = new OrderItemIcewer(entity.eProduct.code, entity.quantity, entity.notes);
         orderItem.setDiscount(entity.discount);
         orderItem.setNotes(entity.notes);
         orderItem.setProductName(entity.eProduct.name);
         orderItem.setId(entity.getId());
-//        orderItem.setOrder(findById(entity.eOrder.getId()));
 
         return orderItem;
     }
@@ -41,17 +37,18 @@ public class OrderRepository implements IRepository<IOrder> {
         IOrder order = fact.from(EOrder.findById(EOrder.class, id)).make();
 
 //        try {
-            List<EOrderItem> items = EOrderItem.find(EOrderItem.class, "e_order = ?", String.valueOf(id));
+        List<EOrderItem> items = EOrderItem.find(EOrderItem.class, "e_order = ?", String.valueOf(id));
 //        OrderItemFactory orderItemFactory = new OrderItemFactory();
 
-            // aggiunge gli items
-            for (EOrderItem entity : items) {
-                IOrderItem orderItem = makeOrderItem(entity);
-                orderItem.setOrder(order);
-                order.getItems().add(orderItem);
-            }
+        // aggiunge gli items
+        for (EOrderItem entity : items) {
+//            order.getItems().add(orderItemFactory.from(item).make());
+            IOrderItem orderItem = makeOrderItem(entity);
+            orderItem.setOrder(order);
+            order.getItems().add(orderItem);
+        }
 
-            return order;
+        return order;
 //        } catch (NullPointerException exc) {
 //            //remove(order);
 //            EOrder.findById(EOrder.class, id).delete();

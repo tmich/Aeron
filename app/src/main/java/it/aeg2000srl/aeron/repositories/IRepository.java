@@ -2,6 +2,8 @@ package it.aeg2000srl.aeron.repositories;
 
 import java.util.List;
 
+import it.aeg2000srl.aeron.core.IOrder;
+
 /**
  * Created by tiziano.michelessi on 06/10/2015.
  */

@@ -28,9 +28,11 @@ public class CustomerDetailsActivity extends AppCompatActivity {
     TextView lblCustomerAddress;
     TextView lblCustomerCity;
     Button btnNewOrder;
-    Button btnWaitingOrders;
+    Button btnNewOrderIcewer;
+//    Button btnWaitingOrders;
     ListView lstFavorites;
     UseCasesService service;
+    Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +43,15 @@ public class CustomerDetailsActivity extends AppCompatActivity {
         lblCustomerAddress = (TextView)findViewById(R.id.lblCustomerAddress);
         lblCustomerCity = (TextView)findViewById(R.id.lblCustomerCity);
         btnNewOrder = (Button)findViewById(R.id.btnNewOrder);
-        btnWaitingOrders = (Button)findViewById(R.id.btnWaitingOrders);
+        btnNewOrderIcewer = (Button)findViewById(R.id.btnNewOrderIcewer);
+//        btnWaitingOrders = (Button)findViewById(R.id.btnWaitingOrders);
         lstFavorites = (ListView)findViewById(R.id.lstFavorites);
         service = new UseCasesService();
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
 
         if (getIntent() != null) {
             Intent intent = getIntent();
@@ -53,11 +61,6 @@ public class CustomerDetailsActivity extends AppCompatActivity {
         } else {
             finish();
         }
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
 
         // creazione nuovo ordine
         btnNewOrder.setOnClickListener(new View.OnClickListener() {
@@ -69,7 +72,7 @@ public class CustomerDetailsActivity extends AppCompatActivity {
 
                 // preferiti selezionati
                 ArrayList<String> selectedCodes = new ArrayList<>();
-                for(FavoriteProduct fav : getFavoritesAdapter().getFavorites()) {
+                for (FavoriteProduct fav : getFavoritesAdapter().getFavorites()) {
                     if (fav.isSelected()) {
                         selectedCodes.add(fav.getCode());
                     }
@@ -79,15 +82,26 @@ public class CustomerDetailsActivity extends AppCompatActivity {
             }
         });
 
-        // ordini in attesa
-        btnWaitingOrders.setOnClickListener(new View.OnClickListener() {
+        // creazione nuovo ordine Icewer
+        btnNewOrderIcewer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(CustomerDetailsActivity.this, WaitingOrdersActivity.class);
+                Intent intent = new Intent(CustomerDetailsActivity.this, OrderIcewerActivity.class);
+                intent.setAction(getString(R.string.actionNewOrder));
                 intent.putExtra(getString(R.string.customerId), customer.getId());
                 startActivity(intent);
             }
         });
+
+        // ordini in attesa
+//        btnWaitingOrders.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(CustomerDetailsActivity.this, WaitingOrdersActivity.class);
+//                intent.putExtra(getString(R.string.customerId), customer.getId());
+//                startActivity(intent);
+//            }
+//        });
 
     }
 
@@ -100,7 +114,15 @@ public class CustomerDetailsActivity extends AppCompatActivity {
         lstFavorites.setAdapter(new FavoriteProductsArrayAdapter(this, service.getFavorites(customer)));
 
         //ordini in attesa
-        btnWaitingOrders.setEnabled(service.getWaitingOrders(customer).size() > 0);
+//        btnWaitingOrders.setEnabled(service.getWaitingOrders(customer).size() > 0);
+        updateMenuActions();
+    }
+
+    void updateMenuActions() {
+        if (this.menu != null) {
+            MenuItem menuItem = this.menu.findItem(R.id.action_orders_waiting);
+            menuItem.setVisible(service.getWaitingOrders(customer).size() > 0);
+        }
     }
 
     @Override
@@ -117,6 +139,10 @@ public class CustomerDetailsActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_customer_details, menu);
+        this.menu = menu;
+
+        updateMenuActions();
+
         return true;
     }
 
@@ -128,8 +154,14 @@ public class CustomerDetailsActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_orders_history) {
+            Intent intent = new Intent(CustomerDetailsActivity.this, OrdersHistoryActivity.class);
+            intent.putExtra(getString(R.string.customerId), customer.getId());
+            startActivity(intent);
+        } else if (id == R.id.action_orders_waiting) {
+            Intent intent = new Intent(CustomerDetailsActivity.this, WaitingOrdersActivity.class);
+            intent.putExtra(getString(R.string.customerId), customer.getId());
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

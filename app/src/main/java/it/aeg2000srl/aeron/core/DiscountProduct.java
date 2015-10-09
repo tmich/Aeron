@@ -1,18 +1,24 @@
 package it.aeg2000srl.aeron.core;
 
 /**
- * Created by tiziano.michelessi on 06/10/2015.
+ * Created by tiziano.michelessi on 09/10/2015.
  */
-public class Product implements IProduct {
+public class DiscountProduct implements IProduct {
     protected long id;
     protected String name;
     protected String code;
     protected double price;
+    IDiscount discount;
 
-    public Product(String name, String code, double price) {
-        this.code = code;
-        this.name = name;
+    public DiscountProduct(String name, double price, IDiscount discount) {
         this.price = price;
+        this.name = name;
+        this.discount = discount;
+    }
+
+    @Override
+    public double getPrice() {
+        return discount.calculatePrice(price);
     }
 
     @Override
@@ -33,11 +39,6 @@ public class Product implements IProduct {
     @Override
     public void setCode(String code) {
         this.code = code;
-    }
-
-    @Override
-    public double getPrice() {
-        return price;
     }
 
     @Override
@@ -64,8 +65,10 @@ public class Product implements IProduct {
     public boolean equals(Object other) {
         if (other == null) return false;
         if (other == this) return true;
-        if (!(other instanceof Product)) return false;
-        Product otherProduct = (Product)other;
+        if (!(other instanceof DiscountProduct)) return false;
+        DiscountProduct otherProduct = (DiscountProduct)other;
         return code.equals(otherProduct.getCode());
     }
+
+
 }

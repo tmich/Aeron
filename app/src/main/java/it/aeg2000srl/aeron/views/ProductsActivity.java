@@ -52,6 +52,7 @@ public class ProductsActivity extends AppCompatActivity implements SearchView.On
             Intent intent = getIntent();
             if(intent.getAction() != null) {
                 if (intent.getAction().equals(getString(R.string.PICK_PRODUCT))) {
+                    // Restituisco al chiamante il codice prodotto selezionato
                     productsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -62,7 +63,7 @@ public class ProductsActivity extends AppCompatActivity implements SearchView.On
                                 @Override
                                 public void onClick(View view) {
                                     Intent returnIntent = new Intent();
-                                    returnIntent.putExtra(getString(R.string.productId), product.getId());
+                                    returnIntent.putExtra(getString(R.string.productCode), product.getCode());
                                     returnIntent.putExtra(getString(R.string.quantity), dialog.getQuantity());
                                     returnIntent.putExtra(getString(R.string.notes), dialog.getNotes());
                                     returnIntent.putExtra(getString(R.string.discount), dialog.getDiscount());
