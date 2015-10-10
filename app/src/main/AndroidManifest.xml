@@ -53,6 +53,10 @@
             android:name=".views.OrderIcewerActivity"
             android:label="@string/title_activity_orders_icewer" >
         </activity>
+        <activity
+            android:name=".views.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
     </application>
 
 </manifest>

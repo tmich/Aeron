@@ -127,7 +127,7 @@ public class ProductsActivity extends AppCompatActivity implements SearchView.On
         barProgressDialog.show();
         updateBarHandler = new Handler();
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String url = SP.getString("api_address", getString(R.string.test_url)) + "/products";
+        String url = SP.getString("pref_default_api_url", getString(R.string.test_url)) + "/products";
         new DownloadProductsService(updateBarHandler).execute(url);
     }
 

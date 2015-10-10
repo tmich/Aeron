@@ -123,7 +123,8 @@ public class CustomersActivity extends AppCompatActivity implements SearchView.O
         barProgressDialog.show();
         updateBarHandler = new Handler();
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String url = SP.getString("api_address", getString(R.string.test_url)) + "/customers";
+        String url = SP.getString("pref_default_api_url", getString(R.string.test_url)) + "/customers";
+        showMessage(url);
         new DownloadCustomersService(updateBarHandler).execute(url);
     }
 
