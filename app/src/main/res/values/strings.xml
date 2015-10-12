@@ -6,7 +6,7 @@
     <string name="title_activity_products">Prodotti</string>
     <string name="no_data">Nessun risultato</string>
     <string name="title_activity_customers">Clienti</string>
-    <string name="test_url">http://192.168.56.1:5000/api/v1.0</string>
+    <string name="test_url">http://192.168.1.85:5000/api/v1.0</string>
     <string name="please_wait">Attendere prego...</string>
     <string name="title_activity_update_data">Aggiornamento dati</string>
     <string name="title_activity_update_customers">Aggiornamento clienti</string>

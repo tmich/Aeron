@@ -223,12 +223,13 @@ public class OrderIcewerActivity extends AppCompatActivity {
 
     protected long save() {
         long newId = 0;
+        /*
         try {
             newId = orderRepository.add(order);
             order.setId(newId);
         } catch (Exception exc) {
             showMessage(exc.toString());
-        }
+        }*/
         return newId;
     }
 
