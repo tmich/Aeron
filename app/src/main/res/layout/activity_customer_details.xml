@@ -41,6 +41,12 @@
             android:layout_height="wrap_content"
             android:text="@string/new_order_icewer"/>
 
+        <Button
+            android:id="@+id/btnPriceList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_activity_price_list"/>
+
         <!--<Button-->
             <!--android:id="@+id/btnWaitingOrders"-->
             <!--android:layout_width="wrap_content"-->

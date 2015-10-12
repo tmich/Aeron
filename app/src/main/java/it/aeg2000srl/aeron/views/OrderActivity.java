@@ -392,6 +392,7 @@ public class OrderActivity extends AppCompatActivity {
                 JSONObject json = new JSONObject();
                 json.put("user_id", 1);
                 json.put("customer_id", order.getCustomerId());
+                json.put("type", order.getType() == IOrder.OrderType.NORMAL ? "O" : "I");
                 JSONArray voci = new JSONArray();
 
                 for(IOrderItem orderItem : order.getItems()) {

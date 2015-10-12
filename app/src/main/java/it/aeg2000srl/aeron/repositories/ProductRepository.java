@@ -4,6 +4,7 @@ import com.orm.query.Condition;
 import com.orm.query.Select;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import it.aeg2000srl.aeron.core.IOrder;
@@ -110,11 +111,13 @@ public class ProductRepository implements IRepository<Product> {
         List<IOrder> orders = orderRepository.findAllByCustomerId(customerId);
 
         for (IOrder order : orders) {
-            for (IOrderItem item : order.getItems()) {
-                EProduct entity = EProduct.findById(EProduct.class, item.getProductId());
-                Product fav = fact.from(entity).make();
-                if (!products.contains(fav)) {
-                    products.add(fav);
+            if(order.getType() == IOrder.OrderType.NORMAL) {
+                for (IOrderItem item : order.getItems()) {
+                    EProduct entity = EProduct.findById(EProduct.class, item.getProductId());
+                    Product fav = fact.from(entity).make();
+                    if (!products.contains(fav)) {
+                        products.add(fav);
+                    }
                 }
             }
         }

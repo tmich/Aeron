@@ -8,6 +8,7 @@ public class OrderItemIcewer implements IOrderItem {
     String notes;
     String productCode;
     IOrder order;
+    double price;
 
     public OrderItemIcewer(String productCode, int quantity, String notes) {
         this.productCode = productCode;
@@ -71,6 +72,11 @@ public class OrderItemIcewer implements IOrderItem {
     }
 
     @Override
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
+
+    @Override
     public IOrder getOrder() {
         return order;
     }
@@ -88,5 +94,15 @@ public class OrderItemIcewer implements IOrderItem {
     @Override
     public void setProductName(String productName) {
         productCode = productName;
+    }
+
+    @Override
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    @Override
+    public double getPrice() {
+        return price;
     }
 }

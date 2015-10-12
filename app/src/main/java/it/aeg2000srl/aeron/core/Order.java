@@ -14,12 +14,14 @@ public class Order implements IOrder {
     protected Date sentDate = null;
     protected List<IOrderItem> items;
     private String notes;
+    protected OrderType type;
 
     public Order(Customer owner) {
         setCustomerId(owner.getId());
         items = new ArrayList<>();
         creationDate = new Date();
         sentDate = new Date(0);
+        type = OrderType.NORMAL;
     }
 
     public boolean hasBeenSent() {
@@ -50,7 +52,7 @@ public class Order implements IOrder {
 
     protected IOrderItem getByProduct(IProduct product) {
         for (IOrderItem item : items) {
-            if(item.getProductId() == product.getId()) {
+            if(item.getProductCode().equals(product.getCode())) {
                 return item;
             }
         }
@@ -137,6 +139,6 @@ public class Order implements IOrder {
 
     @Override
     public OrderType getType() {
-        return OrderType.NORMAL;
+        return type;
     }
 }

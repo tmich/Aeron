@@ -15,4 +15,14 @@ public class ValueDiscount implements IDiscount {
         double discountPrice = price - value;
         return discountPrice;
     }
+
+    @Override
+    public String getDescription() {
+        return "-" + String.valueOf(value);
+    }
+
+    @Override
+    public double getValue() {
+        return value;
+    }
 }

@@ -2,6 +2,8 @@ package it.aeg2000srl.aeron;
 
 import android.test.AndroidTestCase;
 
+import java.util.ArrayList;
+
 import it.aeg2000srl.aeron.core.Customer;
 import it.aeg2000srl.aeron.core.IOrderItem;
 import it.aeg2000srl.aeron.core.Order;
@@ -23,11 +25,18 @@ public class OrderRepositoryTest extends AndroidTestCase {
 
     public void testShouldCreateNewOrder() {
         CustomerRepository customerRepository = new CustomerRepository();
-        Customer customer = customerRepository.getAll().get(0);
+        Customer customer = new Customer("Bappo", "via del Fante di Coppe, 345", "Firenze");
+        customer.setId(customerRepository.add(customer));
         ProductRepository productRepository = new ProductRepository();
-        Product p1 = productRepository.findById(1);
-        Product p3 = productRepository.findById(3);
-        Product p5 = productRepository.findById(8);
+        final Product p1 = new Product("Alici marinate 1KG", "ALICMAR", 8.50);
+        final Product p3 = new Product("Sogliole surgelate 2KG", "SOGSUR", 17.80);
+        final Product p5 = new Product("Gamberi congelati 1KG", "GAMBCON", 9.90);
+        p1.setId(productRepository.add(p1));
+        p3.setId(productRepository.add(p3));
+        p5.setId(productRepository.add(p5));
+        long id1 = p1.getId();
+        long id3 = p3.getId();
+        long id5 = p5.getId();
 
         Order order = new Order(customer);
         order.add(p1, 3, "prova 1", null);
@@ -39,7 +48,7 @@ public class OrderRepositoryTest extends AndroidTestCase {
         assertEquals(orderRepository.findById(orderId).getItems().size(), 3);
 
         for(IOrderItem item : orderRepository.findById(orderId).getItems()) {
-            assertTrue(item.getProductId() == 1 || item.getProductId() == 3 || item.getProductId() == 8);
+            assertTrue(item.getProductId() == id1 || item.getProductId() == id3 || item.getProductId() == id5);
         }
     }
 }

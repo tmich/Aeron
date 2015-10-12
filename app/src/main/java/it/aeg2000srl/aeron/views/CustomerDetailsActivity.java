@@ -29,6 +29,7 @@ public class CustomerDetailsActivity extends AppCompatActivity {
     TextView lblCustomerCity;
     Button btnNewOrder;
     Button btnNewOrderIcewer;
+    Button btnPriceList;
 //    Button btnWaitingOrders;
     ListView lstFavorites;
     UseCasesService service;
@@ -44,6 +45,7 @@ public class CustomerDetailsActivity extends AppCompatActivity {
         lblCustomerCity = (TextView)findViewById(R.id.lblCustomerCity);
         btnNewOrder = (Button)findViewById(R.id.btnNewOrder);
         btnNewOrderIcewer = (Button)findViewById(R.id.btnNewOrderIcewer);
+        btnPriceList = (Button)findViewById(R.id.btnPriceList);
 //        btnWaitingOrders = (Button)findViewById(R.id.btnWaitingOrders);
         lstFavorites = (ListView)findViewById(R.id.lstFavorites);
         service = new UseCasesService();
@@ -88,6 +90,16 @@ public class CustomerDetailsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(CustomerDetailsActivity.this, OrderIcewerActivity.class);
                 intent.setAction(getString(R.string.actionNewOrder));
+                intent.putExtra(getString(R.string.customerId), customer.getId());
+                startActivity(intent);
+            }
+        });
+
+        // listino cliente
+        btnPriceList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CustomerDetailsActivity.this, PriceListActivity.class);
                 intent.putExtra(getString(R.string.customerId), customer.getId());
                 startActivity(intent);
             }

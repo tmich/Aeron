@@ -15,18 +15,20 @@ public class OrderIcewer implements IOrder {
     protected Date sentDate = null;
     protected List<IOrderItem> items;
     private String notes;
+    protected OrderType type;
 
     public OrderIcewer(Customer customer) {
         customerId = customer.getId();
         items = new ArrayList<>();
         creationDate = new Date();
         sentDate = new Date(0);
+        type = OrderType.ICEWER;
     }
 
     @Override
     public void add(IProduct product, int quantity, String notes, String discount) {
         IOrderItem item = new OrderItemIcewer(product.getCode(), quantity, notes);
-        item.setProductName(product.getName());
+//        item.setProductName(product.getName());
         add(item);
     }
 
@@ -97,6 +99,6 @@ public class OrderIcewer implements IOrder {
 
     @Override
     public OrderType getType() {
-        return OrderType.ICEWER;
+        return type;
     }
 }

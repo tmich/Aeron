@@ -6,24 +6,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
 import java.util.List;
 import java.util.Locale;
-
 import it.aeg2000srl.aeron.R;
+import it.aeg2000srl.aeron.core.DiscountProduct;
 import it.aeg2000srl.aeron.core.IProduct;
-import it.aeg2000srl.aeron.core.Product;
 
 /**
- * Created by tiziano.michelessi on 06/10/2015.
+ * Created by tiziano.michelessi on 12/10/2015.
  */
-public class ProductsArrayAdapter extends ArrayAdapter<Product> {
-    private final Activity context;
-    private final List<Product> products;
+public class DiscountProductsArrayAdapter extends ArrayAdapter<DiscountProduct> {
+    Activity context;
+    List<DiscountProduct> objects;
 
-    public ProductsArrayAdapter(Activity context, List<Product> products) {
-        super(context, R.layout.products, products);
+    public DiscountProductsArrayAdapter(Activity context, List<DiscountProduct> objects) {
+        super(context, R.layout.pricelist, objects);
         this.context = context;
-        this.products = products;
+        this.objects = objects;
     }
 
     // static to save the reference to the outer class and to avoid access to
@@ -31,6 +33,8 @@ public class ProductsArrayAdapter extends ArrayAdapter<Product> {
     static class ViewHolder {
         public TextView textView;
         public TextView priceView;
+        public TextView discountedPriceView;
+        public TextView discountDesc;
     }
 
     @Override
@@ -45,17 +49,21 @@ public class ProductsArrayAdapter extends ArrayAdapter<Product> {
         View rowView = convertView;
         if (rowView == null) {
             LayoutInflater inflater = context.getLayoutInflater();
-            rowView = inflater.inflate(R.layout.products, null, true);
+            rowView = inflater.inflate(R.layout.pricelist, null, true);
             holder = new ViewHolder();
             holder.textView = (TextView) rowView.findViewById(R.id.txtName);
-            holder.priceView = (TextView) rowView.findViewById(R.id.txtPrice);
+//            holder.priceView = (TextView) rowView.findViewById(R.id.txtPrice);
+//            holder.discountDesc = (TextView) rowView.findViewById(R.id.txtDiscountDesc);
+            holder.discountedPriceView = (TextView) rowView.findViewById(R.id.txtDiscountedPrice);
             rowView.setTag(holder);
         } else {
             holder = (ViewHolder) rowView.getTag();
         }
-        IProduct product = products.get(position);
+        DiscountProduct product = objects.get(position);
         holder.textView.setText(product.getName());
-        holder.priceView.setText(String.format(Locale.ITALIAN, "%.2f €", product.getPrice()));
+//        holder.priceView.setText(String.format(Locale.ITALIAN, "%.2f €", product.getOriginalPrice()));
+//        holder.discountDesc.setText(product.getDiscount().getDescription());
+        holder.discountedPriceView.setText(String.format(Locale.ITALIAN, "%.2f €", product.getPrice()));
         return rowView;
     }
 }

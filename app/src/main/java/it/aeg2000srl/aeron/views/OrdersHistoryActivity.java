@@ -26,6 +26,7 @@ public class OrdersHistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_orders_history);
         lstSentOrders = (ListView)findViewById(R.id.lstSentOrders);
+        lstSentOrders.setEmptyView(findViewById(R.id.empty_list));
         service = new UseCasesService();
 
         if (getIntent() != null) {

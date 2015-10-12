@@ -5,4 +5,6 @@ package it.aeg2000srl.aeron.core;
  */
 public interface IDiscount {
     double calculatePrice(double price);
+    String getDescription();
+    double getValue();
 }

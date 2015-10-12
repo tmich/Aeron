@@ -63,7 +63,12 @@ public class WaitingOrdersActivity extends AppCompatActivity {
                 IOrder order = getWaitingOrdersAdapter().getItem(i);
 
                 // modifica di un ordine salvato
-                Intent intent = new Intent(WaitingOrdersActivity.this, OrderActivity.class);
+                Intent intent;
+                if (order.getType() == IOrder.OrderType.NORMAL) {
+                    intent = new Intent(WaitingOrdersActivity.this, OrderActivity.class);
+                } else {
+                    intent = new Intent(WaitingOrdersActivity.this, OrderIcewerActivity.class);
+                }
                 intent.setAction(getString(R.string.actionEditOrder));
                 intent.putExtra(getString(R.string.orderId), order.getId());
                 startActivity(intent);

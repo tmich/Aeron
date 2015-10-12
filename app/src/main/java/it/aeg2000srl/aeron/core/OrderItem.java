@@ -13,6 +13,7 @@ public class OrderItem implements IOrderItem {
     protected String discount;
     protected String notes;
     protected IOrder order;
+    private double price;
 
     public OrderItem(IProduct product, int quantity) {
         this(product, quantity, null, null);
@@ -87,7 +88,12 @@ public class OrderItem implements IOrderItem {
 
     @Override
     public String getProductCode() {
-        return null;
+        return this.product_code;
+    }
+
+    @Override
+    public void setProductCode(String productCode) {
+        this.product_code = productCode;
     }
 
     @Override
@@ -104,5 +110,15 @@ public class OrderItem implements IOrderItem {
     @Override
     public void setProductName(String productName) {
         product_name = productName;
+    }
+
+    @Override
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    @Override
+    public double getPrice() {
+        return price;
     }
 }

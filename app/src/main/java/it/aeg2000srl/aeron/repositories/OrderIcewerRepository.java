@@ -23,10 +23,10 @@ public class OrderIcewerRepository implements IRepository<IOrder> {
     }
 
     protected OrderItemIcewer makeOrderItem(EOrderItem entity) {
-        OrderItemIcewer orderItem = new OrderItemIcewer(entity.eProduct.code, entity.quantity, entity.notes);
+        OrderItemIcewer orderItem = new OrderItemIcewer(entity.productCode, entity.quantity, entity.notes);
         orderItem.setDiscount(entity.discount);
         orderItem.setNotes(entity.notes);
-        orderItem.setProductName(entity.eProduct.name);
+//        orderItem.setProductName(entity.eProduct.name);
         orderItem.setId(entity.getId());
 
         return orderItem;

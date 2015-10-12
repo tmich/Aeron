@@ -34,4 +34,13 @@
     <string name="actionEditOrder">EDIT_ORDER</string>
     <string name="new_order_icewer">Nuovo Icewer</string>
     <string name="title_activity_orders_icewer">Ordine Icewer</string>
+    <string name="title_activity_price_list">Listino Cliente</string>
+    <string name="PICK_PRODUCT_FOR_ORDER_ITEM">pickProductForOrderItem</string>
+    <string name="PICK_PRODUCT_FOR_DISCOUNT">pickOnlyProduct</string>
+    <string name="discountValue">discountValue</string>
+    <string name="discountType">discountType</string>
+    <string name="no_customers">Nessun cliente. Aggiorna i dati per favore.</string>
+    <string name="no_products">Nessun prodotto. Aggiorna i dati per favore.</string>
+    <string name="no_pricelist">Non hai ancora fatto sconti a questo cliente.</string>
+    <string name="no_orders">Per questo cliente non hai mai inviato ordini.</string>
 </resources>

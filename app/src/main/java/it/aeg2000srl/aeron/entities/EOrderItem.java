@@ -6,10 +6,12 @@ import com.orm.SugarRecord;
  * Created by tiziano.michelessi on 06/10/2015.
  */
 public class EOrderItem extends SugarRecord<EOrderItem> {
+    public String productName;
+    public String productCode;
     public int quantity;
     public String discount;
     public String notes;
-    public String code;
+    public double price;
 
     // relationship
     public EOrder eOrder;

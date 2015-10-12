@@ -26,6 +26,8 @@ public interface IOrderItem {
 
     String getProductCode();
 
+    void setProductCode(String productCode);
+
     IOrder getOrder();
 
     void setOrder(IOrder order);
@@ -33,4 +35,8 @@ public interface IOrderItem {
     String getProductName();
 
     void setProductName(String productName);
+
+    void setPrice(double price);
+
+    double getPrice();
 }

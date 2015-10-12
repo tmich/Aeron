@@ -9,11 +9,17 @@ public class DiscountProduct implements IProduct {
     protected String code;
     protected double price;
     IDiscount discount;
+    protected long customerId;
 
-    public DiscountProduct(String name, double price, IDiscount discount) {
+    public DiscountProduct(String code, String name, double price, IDiscount discount) {
+        this.code = code;
         this.price = price;
         this.name = name;
         this.discount = discount;
+    }
+
+    public IDiscount getDiscount() {
+        return discount;
     }
 
     @Override
@@ -70,5 +76,11 @@ public class DiscountProduct implements IProduct {
         return code.equals(otherProduct.getCode());
     }
 
+    public long getCustomerId() {
+        return customerId;
+    }
 
+    public void setCustomerId(long customerId) {
+        this.customerId = customerId;
+    }
 }

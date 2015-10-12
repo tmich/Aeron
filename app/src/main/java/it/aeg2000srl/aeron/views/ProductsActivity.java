@@ -29,8 +29,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import it.aeg2000srl.aeron.R;
+import it.aeg2000srl.aeron.core.PercentDiscount;
 import it.aeg2000srl.aeron.core.Product;
 import it.aeg2000srl.aeron.repositories.ProductRepository;
+import it.aeg2000srl.aeron.services.UseCasesService;
 import it.aeg2000srl.aeron.views.adapters.ProductsArrayAdapter;
 
 public class ProductsActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
@@ -39,7 +41,7 @@ public class ProductsActivity extends AppCompatActivity implements SearchView.On
     ProgressDialog barProgressDialog;
     Handler updateBarHandler;
     protected ProductRepository repo;
-    int requestCode;
+    UseCasesService service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +49,14 @@ public class ProductsActivity extends AppCompatActivity implements SearchView.On
         setContentView(R.layout.activity_products);
         productsList = (ListView)findViewById(R.id.productsList);
         productsList.setEmptyView(findViewById(R.id.empty_list));
+        service = new UseCasesService();
+        repo = new ProductRepository();
 
         if(getIntent() != null) {
             Intent intent = getIntent();
             if(intent.getAction() != null) {
                 if (intent.getAction().equals(getString(R.string.PICK_PRODUCT))) {
+                    setTitle("Selezione prodotto");
                     // Restituisco al chiamante il codice prodotto selezionato
                     productsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
@@ -75,6 +80,18 @@ public class ProductsActivity extends AppCompatActivity implements SearchView.On
                             dialog.show();
                         }
                     });
+                } else if (intent.getAction().equals(getString(R.string.PICK_PRODUCT_FOR_DISCOUNT))) {
+                    setTitle("Selezione prodotto da scontare");
+                    productsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            final Product product = getProductsAdapter().getItem(i);
+                            Intent returnIntent = new Intent();
+                            returnIntent.putExtra(getString(R.string.productCode), product.getCode());
+                            setResult(RESULT_OK, returnIntent);
+                            finish();
+                        }
+                    });
                 }
             }
         }
@@ -83,9 +100,7 @@ public class ProductsActivity extends AppCompatActivity implements SearchView.On
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        // TODO: service layer
-        repo = new ProductRepository();
-        productsList.setAdapter(new ProductsArrayAdapter(ProductsActivity.this, repo.getAll()));
+        productsList.setAdapter(new ProductsArrayAdapter(ProductsActivity.this, service.getAllProducts()));
     }
 
     @Override
@@ -133,19 +148,22 @@ public class ProductsActivity extends AppCompatActivity implements SearchView.On
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        getProductsAdapter().clear();
-        getProductsAdapter().addAll(repo.findByName(query));
-        getProductsAdapter().notifyDataSetChanged();
-
-        return getProductsAdapter().getCount() > 0;
+        return searchProduct(query);
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        getProductsAdapter().clear();
-        getProductsAdapter().addAll(repo.findByName(newText));
-        getProductsAdapter().notifyDataSetChanged();
+        return searchProduct(newText);
+    }
 
+    protected boolean searchProduct(String query) {
+        getProductsAdapter().clear();
+        if (query != "") {
+            getProductsAdapter().addAll(service.findProductsByName(query));
+        } else {
+            getProductsAdapter().addAll(service.getAllProducts());
+        }
+        getProductsAdapter().notifyDataSetChanged();
         return getProductsAdapter().getCount() > 0;
     }
 
@@ -165,7 +183,6 @@ public class ProductsActivity extends AppCompatActivity implements SearchView.On
 
         public DownloadProductsService(Handler handler) {
             this.handler = handler;
-//            showMessage("Prima - Sono presenti " + repo.size() + " prodotti");
         }
 
         @Override
@@ -223,9 +240,9 @@ public class ProductsActivity extends AppCompatActivity implements SearchView.On
             if(exception == null) {
 //                showMessage("ok: " + result);
 
-                getProductsAdapter().addAll(repo.getAll());
+                getProductsAdapter().addAll(service.getAllProducts());
                 getProductsAdapter().notifyDataSetChanged();
-                showMessage("Sono presenti " + repo.size() + " prodotti");
+                showMessage("Aggiornamento completato");
             } else {
                 showError(exception);
             }

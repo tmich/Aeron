@@ -66,7 +66,7 @@ public class OrdersArrayAdapter extends ArrayAdapter<IOrder> {
 //            Customer customer = customerRepository.findById(order.getCustomerId());
 //            if (customer != null) {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy H:m", Locale.ITALY);
-                holder.txtDescription.setText("Ordine n." + order.getId() + " del " + simpleDateFormat.format(order.getCreationDate()));
+                holder.txtDescription.setText("Ordine" + (order.getType() == IOrder.OrderType.ICEWER ? " ICEWER" : "") + " n." + order.getId() + " del " + simpleDateFormat.format(order.getCreationDate()));
 //            } else {
 //                holder.txtDescription.setText("");
 //            }

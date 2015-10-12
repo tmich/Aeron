@@ -8,6 +8,8 @@ import it.aeg2000srl.aeron.core.IOrderItem;
 import it.aeg2000srl.aeron.core.IProduct;
 import it.aeg2000srl.aeron.core.Order;
 import it.aeg2000srl.aeron.core.OrderItem;
+import it.aeg2000srl.aeron.core.OrderItemIcewer;
+import it.aeg2000srl.aeron.core.Product;
 import it.aeg2000srl.aeron.entities.EOrder;
 import it.aeg2000srl.aeron.entities.EOrderItem;
 import it.aeg2000srl.aeron.factories.OrderFactory;
@@ -30,9 +32,20 @@ public class OrderRepository implements IRepository<IOrder> {
         orderItem.setDiscount(entity.discount);
         orderItem.setNotes(entity.notes);
         orderItem.setProductName(entity.eProduct.name);
+        orderItem.setProductCode(entity.eProduct.code);
         orderItem.setId(entity.getId());
+        orderItem.setPrice(entity.eProduct.price);
 //        orderItem.setOrder(findById(entity.eOrder.getId()));
 
+        return orderItem;
+    }
+
+    protected OrderItemIcewer makeOrderItemIcewer(EOrderItem entity) {
+        OrderItemIcewer orderItem = new OrderItemIcewer(entity.productCode, entity.quantity, entity.notes);
+        orderItem.setDiscount(entity.discount);
+        orderItem.setNotes(entity.notes);
+        orderItem.setId(entity.getId());
+        orderItem.setPrice(entity.price);
         return orderItem;
     }
 
@@ -46,7 +59,12 @@ public class OrderRepository implements IRepository<IOrder> {
 
             // aggiunge gli items
             for (EOrderItem entity : items) {
-                IOrderItem orderItem = makeOrderItem(entity);
+                IOrderItem orderItem;
+                if (order.getType() == IOrder.OrderType.NORMAL) {
+                    orderItem = makeOrderItem(entity);
+                } else {
+                    orderItem = makeOrderItemIcewer(entity);
+                }
                 orderItem.setOrder(order);
                 order.getItems().add(orderItem);
             }

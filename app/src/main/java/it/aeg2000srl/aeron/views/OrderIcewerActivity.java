@@ -98,7 +98,7 @@ public class OrderIcewerActivity extends AppCompatActivity {
                 dialog.setOnOkListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        IProduct product = new ProductIcewer(dialog.getProductName());
+                        IProduct product = new Product(dialog.getProductName(), dialog.getProductName(), 0.00);
                         int qty = dialog.getQuantity();
                         String notes = dialog.getNotes();
                         String discount = dialog.getDiscount();
@@ -359,7 +359,7 @@ public class OrderIcewerActivity extends AppCompatActivity {
 
             try {
                 // Send GET data request
-                URL url = new URL(_url + "/ordersicewer/new" );
+                URL url = new URL(_url + "/orders/new" );
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestProperty("Content-Type", "application/json");
                 conn.setRequestProperty("Accept", "application/json");
@@ -370,6 +370,7 @@ public class OrderIcewerActivity extends AppCompatActivity {
                 JSONObject json = new JSONObject();
                 json.put("user_id", 1);
                 json.put("customer_id", order.getCustomerId());
+                json.put("type", order.getType() == IOrder.OrderType.NORMAL ? "O" : "I");
                 JSONArray voci = new JSONArray();
 
                 for(IOrderItem orderItem : order.getItems()) {

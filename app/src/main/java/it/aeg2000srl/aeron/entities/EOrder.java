@@ -11,7 +11,7 @@ public class EOrder extends SugarRecord<EOrder> {
     public Date creationDate;
     public String notes;
     public Date sentDate;
-    public int type;
+    public int type;        // 0=normale, 1=icewer
 
     // relationships
     public EUser user;

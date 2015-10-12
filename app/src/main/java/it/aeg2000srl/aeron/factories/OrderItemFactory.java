@@ -3,7 +3,6 @@ package it.aeg2000srl.aeron.factories;
 import it.aeg2000srl.aeron.core.IOrderItem;
 import it.aeg2000srl.aeron.core.IProduct;
 import it.aeg2000srl.aeron.core.OrderItem;
-import it.aeg2000srl.aeron.core.Product;
 import it.aeg2000srl.aeron.entities.EOrderItem;
 import it.aeg2000srl.aeron.entities.EProduct;
 
@@ -21,7 +20,8 @@ public class OrderItemFactory implements IFactory<EOrderItem, OrderItem> {
         entity.discount = orderItem.getDiscount();
         entity.quantity = orderItem.getQuantity();
         entity.notes = orderItem.getNotes();
-        entity.code = orderItem.getProductCode();
+        entity.productCode = orderItem.getProductCode();
+        entity.productName = orderItem.getProductName();
         //entity.eOrder = OrderFactory.toEntity(orderItem.getOrder());
         return entity;
     }

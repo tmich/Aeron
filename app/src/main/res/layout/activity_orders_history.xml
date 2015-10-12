@@ -9,6 +9,12 @@
     <ListView
         android:id="@+id/lstSentOrders"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"></ListView>
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:text="@string/no_orders"
+        android:id="@+id/empty_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </RelativeLayout>

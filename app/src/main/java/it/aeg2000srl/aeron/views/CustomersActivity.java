@@ -36,6 +36,7 @@ import java.util.List;
 import it.aeg2000srl.aeron.R;
 import it.aeg2000srl.aeron.core.Customer;
 import it.aeg2000srl.aeron.repositories.CustomerRepository;
+import it.aeg2000srl.aeron.services.UseCasesService;
 import it.aeg2000srl.aeron.views.adapters.CustomersArrayAdapter;
 
 public class CustomersActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
@@ -44,6 +45,7 @@ public class CustomersActivity extends AppCompatActivity implements SearchView.O
     ProgressDialog barProgressDialog;
     Handler updateBarHandler;
     protected CustomerRepository repo;
+    UseCasesService service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,27 +53,17 @@ public class CustomersActivity extends AppCompatActivity implements SearchView.O
         setContentView(R.layout.activity_customer);
         customersList = (ListView)findViewById(R.id.customersList);
         customersList.setEmptyView(findViewById(R.id.empty_list));
+        service = new UseCasesService();
+        repo = new CustomerRepository();
     }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        // TODO: service layer
-        repo = new CustomerRepository();
 
-        customersList.setAdapter(new CustomersArrayAdapter(this, repo.getAll()));
+        customersList.setAdapter(new CustomersArrayAdapter(this, service.getAllCustomers()));
         Log.d("aeron", this.getClass().getCanonicalName() + " onPostCreate ");
 
-        // creazione nuovo ordine
-//        customersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Intent intent = new Intent(CustomersActivity.this, OrderActivity.class);
-//                intent.setAction(getString(R.string.actionNewOrder));
-//                intent.putExtra(getString(R.string.customerId), getCustomersAdapter().getItem(i).getId());
-//                startActivity(intent);
-//            }
-//        });
 
         // scheda cliente
         customersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -129,17 +121,21 @@ public class CustomersActivity extends AppCompatActivity implements SearchView.O
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        getCustomersAdapter().clear();
-        getCustomersAdapter().addAll(repo.findByName(query));
-        getCustomersAdapter().notifyDataSetChanged();
-
-        return getCustomersAdapter().getCount() > 0;
+        return searchCustomer(query);
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
+        return searchCustomer(newText);
+    }
+
+    protected boolean searchCustomer(String query) {
         getCustomersAdapter().clear();
-        getCustomersAdapter().addAll(repo.findByName(newText));
+        if (query != "") {
+            getCustomersAdapter().addAll(service.findCustomerByName(query));
+        } else {
+            getCustomersAdapter().addAll(service.getAllCustomers());
+        }
         getCustomersAdapter().notifyDataSetChanged();
 
         return getCustomersAdapter().getCount() > 0;
@@ -218,11 +214,9 @@ public class CustomersActivity extends AppCompatActivity implements SearchView.O
 
         protected void onPostExecute(Integer result) {
             if(exception == null) {
-//                showMessage("ok: " + result);
-
-                getCustomersAdapter().addAll(repo.getAll());
+                getCustomersAdapter().addAll(service.getAllCustomers());
                 getCustomersAdapter().notifyDataSetChanged();
-                showMessage("Sono presenti " + repo.size() + " clienti");
+                showMessage("Aggiornamento completato");
             } else {
                 showError(exception);
             }
