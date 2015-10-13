@@ -16,9 +16,11 @@ public class OrderIcewer implements IOrder {
     protected List<IOrderItem> items;
     private String notes;
     protected OrderType type;
+    protected Customer mCustomer;
 
     public OrderIcewer(Customer customer) {
         customerId = customer.getId();
+        mCustomer = customer;
         items = new ArrayList<>();
         creationDate = new Date();
         sentDate = new Date(0);
@@ -93,12 +95,12 @@ public class OrderIcewer implements IOrder {
     }
 
     @Override
-    public void setCustomerId(long customerId) {
-
+    public OrderType getType() {
+        return type;
     }
 
     @Override
-    public OrderType getType() {
-        return type;
+    public String getCustomerCode() {
+        return mCustomer.getCode();
     }
 }

@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +20,8 @@ import it.aeg2000srl.aeron.views.adapters.OrdersArrayAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btnGoToProducts;
-    Button btnGoToCustomers;
+    View btnGoToProducts;
+    View btnGoToCustomers;
     ListView lstWaitingOrders;
     UseCasesService useCasesService;
 
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 //        lstWaitingOrders.setEmptyView(findViewById(R.id.empty_list));
 //        lstWaitingOrders.setAdapter(new OrdersArrayAdapter(this, R.layout.orders_waiting, new ArrayList<Order>()));
 
-        btnGoToProducts = (Button)findViewById(R.id.goToProducts);
+        btnGoToProducts = findViewById(R.id.goToProducts);
         btnGoToProducts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnGoToCustomers = (Button)findViewById(R.id.goToCustomers);
+        btnGoToCustomers = findViewById(R.id.goToCustomers);
         btnGoToCustomers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
                 Intent i = new Intent(this, SettingsActivity.class);
                 startActivity(i);
                 break;
-
         }
 
         return super.onOptionsItemSelected(item);

@@ -11,6 +11,7 @@ import it.aeg2000srl.aeron.core.IOrder;
 import it.aeg2000srl.aeron.core.Order;
 import it.aeg2000srl.aeron.core.Product;
 import it.aeg2000srl.aeron.repositories.CustomerRepository;
+import it.aeg2000srl.aeron.repositories.FavoriteProductRepository;
 import it.aeg2000srl.aeron.repositories.OrderRepository;
 import it.aeg2000srl.aeron.repositories.ProductRepository;
 
@@ -42,15 +43,8 @@ public class UseCasesService {
 
     public List<FavoriteProduct> getFavorites(Customer customer) {
         List<FavoriteProduct> favoriteProducts;
-        ProductRepository productRepository = new ProductRepository();
-        List<Product> products = productRepository.getMostOrderedByCustomerId(customer.getId());
-        favoriteProducts = new ArrayList<>(products.size());
-
-        for (Product p :
-                products) {
-            FavoriteProduct fav = new FavoriteProduct(p.getName(), p.getCode(), p.getPrice(), p.getId());
-            favoriteProducts.add(fav);
-        }
+        FavoriteProductRepository favoriteProductRepository = new FavoriteProductRepository();
+        favoriteProducts = favoriteProductRepository.findByCustomerCode(customer.getCode());
 
         return favoriteProducts;
     }

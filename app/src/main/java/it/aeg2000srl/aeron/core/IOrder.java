@@ -38,7 +38,9 @@ public interface IOrder {
 
     Date getSentDate();
 
-    void setCustomerId(long customerId);
+//    void setCustomerId(long customerId);
 
     OrderType getType();
+
+    String getCustomerCode();
 }

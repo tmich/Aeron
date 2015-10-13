@@ -370,13 +370,13 @@ public class OrderIcewerActivity extends AppCompatActivity {
 
                 JSONObject json = new JSONObject();
                 json.put("user_id", 1);
-                json.put("customer_id", order.getCustomerId());
+                json.put("customer_code", order.getCustomerCode());
                 json.put("type", order.getType() == IOrder.OrderType.NORMAL ? "O" : "I");
                 JSONArray voci = new JSONArray();
 
                 for(IOrderItem orderItem : order.getItems()) {
                     JSONObject obj = new JSONObject();
-                    obj.put("product_id", orderItem.getProductId());
+                    obj.put("product_code", orderItem.getProductCode());
                     obj.put("qty", orderItem.getQuantity());
                     obj.put("notes", orderItem.getNotes());
                     voci.put(obj);

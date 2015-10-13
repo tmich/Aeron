@@ -15,9 +15,11 @@ public class Order implements IOrder {
     protected List<IOrderItem> items;
     private String notes;
     protected OrderType type;
+    protected Customer mCustomer;
 
     public Order(Customer owner) {
-        setCustomerId(owner.getId());
+        mCustomer = owner;
+//        setCustomerId(owner.getId());
         items = new ArrayList<>();
         creationDate = new Date();
         sentDate = new Date(0);
@@ -129,16 +131,21 @@ public class Order implements IOrder {
 
     @Override
     public long getCustomerId() {
-        return customerId;
+        return mCustomer.getId();
     }
 
-    @Override
-    public void setCustomerId(long customerId) {
-        this.customerId = customerId;
-    }
+//    @Override
+//    public void setCustomerId(long customerId) {
+//        this.customerId = customerId;
+//    }
 
     @Override
     public OrderType getType() {
         return type;
+    }
+
+    @Override
+    public String getCustomerCode() {
+        return mCustomer.getCode();
     }
 }

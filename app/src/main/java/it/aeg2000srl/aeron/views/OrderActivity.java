@@ -37,9 +37,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import it.aeg2000srl.aeron.R;
 import it.aeg2000srl.aeron.core.Customer;
+import it.aeg2000srl.aeron.core.FavoriteProduct;
 import it.aeg2000srl.aeron.core.IOrder;
 import it.aeg2000srl.aeron.core.IOrderItem;
 import it.aeg2000srl.aeron.core.IOrderSender;
@@ -48,6 +50,7 @@ import it.aeg2000srl.aeron.core.OrderItem;
 import it.aeg2000srl.aeron.core.OrderSender;
 import it.aeg2000srl.aeron.core.Product;
 import it.aeg2000srl.aeron.repositories.CustomerRepository;
+import it.aeg2000srl.aeron.repositories.FavoriteProductRepository;
 import it.aeg2000srl.aeron.repositories.OrderRepository;
 import it.aeg2000srl.aeron.repositories.ProductRepository;
 import it.aeg2000srl.aeron.views.adapters.OrderItemsArrayAdapter;
@@ -263,7 +266,7 @@ public class OrderActivity extends AppCompatActivity {
         barProgressDialog.show();
         updateBarHandler = new Handler();
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String url = SP.getString("api_address", getString(R.string.test_url));
+        String url = SP.getString("pref_default_api_url", getString(R.string.test_url));
         new OrderSender(url, order).execute("");
     }
 
@@ -350,6 +353,22 @@ public class OrderActivity extends AppCompatActivity {
 
             order.setSentDate(new Date());
             orderRepository.add(order);
+
+            // aggiungo i prodotti ordinati ai preferiti
+            Customer customer = customerRepository.findById(order.getCustomerId());
+
+            List<FavoriteProduct> favoriteProductList = new ArrayList<>(order.getItems().size());
+            for(IOrderItem orderItem : order.getItems()) {
+                FavoriteProduct favoriteProduct = new FavoriteProduct(orderItem.getProductName(),
+                        orderItem.getProductCode(), orderItem.getPrice(), orderItem.getProductId());
+                favoriteProduct.setCustomer(customer);
+                favoriteProduct.setHits(favoriteProduct.getHits() + orderItem.getQuantity());
+                favoriteProductList.add(favoriteProduct);
+            }
+
+            FavoriteProductRepository favoriteProductRepository = new FavoriteProductRepository();
+            favoriteProductRepository.addAll(favoriteProductList);
+
             showMessage("Ordine n. " + result + " inviato");
             finish();
         }
@@ -391,13 +410,13 @@ public class OrderActivity extends AppCompatActivity {
 
                 JSONObject json = new JSONObject();
                 json.put("user_id", 1);
-                json.put("customer_id", order.getCustomerId());
+                json.put("customer_code", order.getCustomerCode());
                 json.put("type", order.getType() == IOrder.OrderType.NORMAL ? "O" : "I");
                 JSONArray voci = new JSONArray();
 
                 for(IOrderItem orderItem : order.getItems()) {
                     JSONObject obj = new JSONObject();
-                    obj.put("product_id", orderItem.getProductId());
+                    obj.put("product_code", orderItem.getProductCode());
                     obj.put("qty", orderItem.getQuantity());
                     obj.put("notes", orderItem.getNotes());
                     voci.put(obj);

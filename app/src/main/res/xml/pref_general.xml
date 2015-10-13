@@ -11,7 +11,7 @@
         android:maxLines="1" />
 
     <EditTextPreference
-        android:key="api_url"
+        android:key="pref_default_api_url"
         android:title="@string/pref_title_api_url"
         android:defaultValue="@string/pref_default_api_url"
         android:selectAllOnFocus="true"

@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.PopupMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -71,7 +72,41 @@ public class PriceListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 IProduct discountedProduct = getAdapter().getItem(i);
-                showDiscountDialog(discountedProduct);
+                ProductRepository productRepository = new ProductRepository();
+                Product product = productRepository.findByCode(discountedProduct.getCode());
+                showDiscountDialog(product);
+            }
+        });
+
+        lstPriceList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                final DiscountProduct discountProduct = getAdapter().getItem(i);
+                //Creating the instance of PopupMenu
+                PopupMenu popup = new PopupMenu(PriceListActivity.this, view);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater().inflate(R.menu.popup_menu_pricelist, popup.getMenu());
+
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getItemId() == R.id.deleteDiscount) {
+                            new AlertDialog.Builder(PriceListActivity.this)
+                                    .setTitle("Conferma")
+                                    .setMessage("Eliminare?")
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            priceListRepository.remove(discountProduct);
+                                            update();
+                                        }})
+                                    .setNegativeButton(R.string.no, null).show();
+                        }
+                        return true;
+                    }
+                });
+                popup.show();
+                return true;
             }
         });
     }
@@ -87,18 +122,18 @@ public class PriceListActivity extends AppCompatActivity {
         }
     }
 
-    protected void showDiscountDialog(final IProduct product) {
-        final DiscountedProductDialog dialog = new DiscountedProductDialog(this, product);
+    protected void showDiscountDialog(final Product product) {
+        final DiscountedProductDialog dialog = new DiscountedProductDialog(this, product, customer);
         dialog.setOnOkListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ProductRepository productRepository = new ProductRepository();
-                double originalPrice = productRepository.findByCode(product.getCode()).getPrice();
-                DiscountProduct discountProduct = priceListRepository.getDiscountedProductForCustomerId(customer.getId(), product.getCode());
+                double originalPrice = product.getPrice();
+                DiscountProduct discountProduct = new DiscountProduct(product.getCode(), product.getName(), originalPrice, dialog.getDiscount());
+                discountProduct.setCustomerId(customer.getId());
 
-                if (discountProduct == null) {
-                    discountProduct = new DiscountProduct(product.getCode(), product.getName(), originalPrice, dialog.getDiscount());
-                    discountProduct.setCustomerId(customer.getId());
+                DiscountProduct existingDiscountProduct = priceListRepository.getDiscountedProductForCustomerId(customer.getId(), product.getCode());
+                if (existingDiscountProduct != null) {
+                    discountProduct.setId(existingDiscountProduct.getId());
                 }
 
                 priceListRepository.add(discountProduct);

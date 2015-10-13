@@ -5,9 +5,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,12 +61,7 @@ public class FavoriteProductsArrayAdapter extends ArrayAdapter<FavoriteProduct> 
             holder.checkBox.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     CheckBox cb = (CheckBox) v;
-//                    Country country = (Country) cb.getTag();
                     FavoriteProduct fav = (FavoriteProduct) cb.getTag();
-//                    Toast.makeText(context,
-//                            "Clicked on Checkbox: " + cb.getText() +
-//                                    " is " + cb.isChecked(),
-//                            Toast.LENGTH_LONG).show();
                     fav.setSelected(cb.isChecked());
                 }
             });

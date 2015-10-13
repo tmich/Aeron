@@ -43,4 +43,11 @@
     <string name="no_products">Nessun prodotto. Aggiorna i dati per favore.</string>
     <string name="no_pricelist">Non hai ancora fatto sconti a questo cliente.</string>
     <string name="no_orders">Per questo cliente non hai mai inviato ordini.</string>
+    <string name="yes">Si</string>
+    <string name="no">No</string>
+
+    <string name="title_activity_splash">Splash</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_login">Accesso</string>
 </resources>

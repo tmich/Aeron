@@ -10,14 +10,18 @@ import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import it.aeg2000srl.aeron.R;
+import it.aeg2000srl.aeron.core.Customer;
 import it.aeg2000srl.aeron.core.DiscountProduct;
 import it.aeg2000srl.aeron.core.IDiscount;
 import it.aeg2000srl.aeron.core.IProduct;
 import it.aeg2000srl.aeron.core.PercentDiscount;
 import it.aeg2000srl.aeron.core.Product;
 import it.aeg2000srl.aeron.core.ValueDiscount;
-import it.aeg2000srl.aeron.repositories.ProductRepository;
+import it.aeg2000srl.aeron.repositories.PriceListRepository;
 
 /**
  * Created by tiziano.michelessi on 12/10/2015.
@@ -29,11 +33,12 @@ public class DiscountedProductDialog extends Dialog {
     RadioButton rbValueDiscount;
     RadioButton rbPercentDiscount;
     TextView txtDiscountedPrice;
-    IProduct product;
+    IProduct mProduct;
     Button btnOk;
     Button btnCancel;
+    Customer mCustomer;
 
-    public DiscountedProductDialog(Context context, IProduct product) {
+    public DiscountedProductDialog(Context context, Product product, Customer customer) {
         super(context);
         setContentView(R.layout.discounted_product_dialog);
         setTitle(product.getName());
@@ -45,7 +50,8 @@ public class DiscountedProductDialog extends Dialog {
         txtDiscountedPrice = (TextView)findViewById(R.id.txtDiscountedPrice);
         btnOk = (Button)findViewById(R.id.dialogButtonOK);
         btnCancel = (Button)findViewById(R.id.dialogButtonCancel);
-        this.product = product;
+        mProduct = product;
+        mCustomer = customer;
 
         numDiscountValue.setMinValue(1);
         numDiscountValue.setMaxValue(100);
@@ -55,16 +61,19 @@ public class DiscountedProductDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (product instanceof DiscountProduct) {
-            double dvalue = ((DiscountProduct) product).getDiscount().getValue();
+        // pre-carico la UI con i dati dell'eventuale prodotto scontato già esistente
+        PriceListRepository priceListRepository = new PriceListRepository();
+        DiscountProduct discountProduct = priceListRepository.getDiscountedProductForCustomerId(mCustomer.getId(), mProduct.getCode());
+
+        if (discountProduct != null) {
+            double dvalue = discountProduct.getDiscount().getValue();
             numDiscountValue.setValue((int)Math.round(dvalue));
 
-            rbPercentDiscount.setChecked(((DiscountProduct) product).getDiscount() instanceof PercentDiscount);
-            rbValueDiscount.setChecked(((DiscountProduct) product).getDiscount() instanceof ValueDiscount);
+            rbPercentDiscount.setChecked(discountProduct.getDiscount() instanceof PercentDiscount);
+            rbValueDiscount.setChecked(discountProduct.getDiscount() instanceof ValueDiscount);
         }
 
-
-        update();
+        updateUI();
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,21 +85,21 @@ public class DiscountedProductDialog extends Dialog {
         rbValueDiscount.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                update();
+                updateUI();
             }
         });
 
         rbPercentDiscount.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                update();
+                updateUI();
             }
         });
 
         numDiscountValue.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker numberPicker, int i, int i1) {
-                update();
+                updateUI();
             }
         });
     }
@@ -100,24 +109,20 @@ public class DiscountedProductDialog extends Dialog {
         btnOk.setOnClickListener(listener);
     }
 
-    protected void update() {
-        ProductRepository productRepository = new ProductRepository();
-        double originalPrice = productRepository.findByCode(product.getCode()).getPrice();
-        IDiscount discount = getDiscount();
-        DiscountProduct discountProduct = new DiscountProduct(product.getCode(), product.getName(), originalPrice, discount);
+    protected void updateUI() {
+        double originalPrice = mProduct.getPrice();
 
-        if (product instanceof DiscountProduct ) {
-            discountProduct.setId(product.getId());
-            discountProduct.setCustomerId(((DiscountProduct) product).getCustomerId());
-        }
+        DiscountProduct dummyDiscountedProductForUI = new DiscountProduct(mProduct.getCode(), mProduct.getName(), originalPrice, getDiscount());
+        dummyDiscountedProductForUI.setCustomerId(mCustomer.getId());
 
-        txtOriginalPrice.setText(String.valueOf(originalPrice));
-        txtDiscountedPrice.setText(String.valueOf(discountProduct.getPrice()));
+        txtOriginalPrice.setText(String.valueOf(new BigDecimal(originalPrice).setScale(2, RoundingMode.HALF_UP).doubleValue()));
+        txtDiscountedPrice.setText(String.valueOf(new BigDecimal(dummyDiscountedProductForUI.getPrice()).setScale(2, RoundingMode.HALF_UP).doubleValue()));
 
-        if (discountProduct.getPrice() <= 0) {
+        if (dummyDiscountedProductForUI.getPrice() <= 0) {
             txtDiscountedPrice.setError("L'importo deve essere maggiore di 0");
             btnOk.setEnabled(false);
         } else {
+            txtDiscountedPrice.setError(null);
             btnOk.setEnabled(true);
         }
     }

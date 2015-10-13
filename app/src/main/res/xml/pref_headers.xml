@@ -3,6 +3,7 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header android:fragment="it.aeg2000srl.aeron.views.SettingsActivity$GeneralPreferenceFragment"
+        android:icon="@android:drawable/ic_menu_manage"
         android:title="@string/pref_header_general" />
 
     <!--
