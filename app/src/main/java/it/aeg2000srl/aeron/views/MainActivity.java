@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            txtVersion.setText(packageInfo.versionCode);
+            txtVersion.setText(String.valueOf(packageInfo.versionCode));
         } catch (PackageManager.NameNotFoundException exc) {
             txtVersion.setText("ND");
         }

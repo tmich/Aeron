@@ -1,9 +1,10 @@
 <resources>
 
     <color name="black_overlay">#66000000</color>
-    <color name="celestino">#FFEBFBFF</color>
-    <color name="bluardo">#A3C2FF</color>
-    <color name="giallastro">#FFFF66</color>
-    <color name="verdino">#99FF66</color>
+    <color name="celestino">#66EBFBFF</color>
+    <color name="grigetto">#66c9c9c9</color>
+    <color name="bluardo">#66A3C2FF</color>
+    <color name="giallastro">#66FFFF66</color>
+    <color name="verdino">#6699FF66</color>
 
 </resources>

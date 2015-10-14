@@ -242,7 +242,8 @@ public class ProductsActivity extends AppCompatActivity implements SearchView.On
 
                 getProductsAdapter().addAll(service.getAllProducts());
                 getProductsAdapter().notifyDataSetChanged();
-                showMessage("Aggiornamento completato");
+                long cnt = repo.size();
+                showMessage("Aggiornamento completato: " + cnt);
             } else {
                 showError(exception);
             }

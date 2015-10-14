@@ -217,7 +217,8 @@ public class CustomersActivity extends AppCompatActivity implements SearchView.O
             if(exception == null) {
                 getCustomersAdapter().addAll(service.getAllCustomers());
                 getCustomersAdapter().notifyDataSetChanged();
-                showMessage("Aggiornamento completato");
+                long cnt = repo.size();
+                showMessage("Aggiornamento completato: " + cnt);
             } else {
                 showError(exception);
             }
