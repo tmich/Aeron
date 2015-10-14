@@ -6,156 +6,144 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
+    style="@style/DefaultActivity"
     tools:context=".MainActivity">
 
     <!--ROW-->
     <LinearLayout
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:baselineAligned="false">
 
         <!--COLUMN-->
         <RelativeLayout
-            android:clickable="true"
-            android:background="@android:color/holo_orange_dark"
-            android:layout_height="fill_parent"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:id="@+id/goToProducts"
-            android:gravity="center">
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:padding="8dp">
 
             <ImageView
-                android:id="@+id/categoria_image_1"
-                android:src="@android:drawable/ic_dialog_alert"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"/>
+                android:layout_alignParentStart="true"
+                android:src="@mipmap/ic_launcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-            <TextView
-                android:text="@string/title_activity_products"
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:gravity="center"
-                android:layout_below="@+id/categoria_image_1"
-                android:textAllCaps="true"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"/>
-
-            <!--<Button-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/goToProducts"-->
-                <!--android:text="@string/title_activity_products" />-->
-
-            <!--<Button-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/goToCustomers"-->
-                <!--android:text="@string/title_activity_customers"-->
-                <!--/>-->
 
         </RelativeLayout>
-        <!--END COLUMN-->
-
-        <!--COLUMN-->
-        <RelativeLayout
-            android:background="@android:color/holo_purple"
-            android:layout_height="fill_parent"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:id="@+id/goToCustomers"
-            android:gravity="center">
-
-            <ImageView
-                android:id="@+id/categoria_image_2"
-                android:src="@android:drawable/ic_dialog_alert"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"/>
-
-            <TextView
-                android:text="@string/title_activity_customers"
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:gravity="center"
-                android:layout_below="@+id/categoria_image_2"
-                android:textAllCaps="true"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"/>
-        </RelativeLayout>
-        <!--END COLUMN-->
 
     </LinearLayout>
-    <!--END ROW-->
 
     <!--ROW-->
     <LinearLayout
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:baselineAligned="false"
+        android:layout_marginBottom="40dp">
 
         <!--COLUMN-->
         <RelativeLayout
-            android:clickable="true"
-            android:background="@android:color/holo_blue_bright"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:gravity="center">
+            android:padding="10dp"
+            android:gravity="center"
+            android:layout_marginTop="10dp">
 
-            <ImageView
-                android:id="@+id/categoria_image_3"
-                android:src="@android:drawable/ic_dialog_alert"
+            <EditText
+                android:drawableEnd="@android:drawable/ic_menu_search"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"/>
-
-            <TextView
-                android:text="PIZZA"
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:gravity="center"
-                android:layout_below="@+id/categoria_image_3"
-                android:textAllCaps="true"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"/>
-
+                android:hint="@string/cerca_cliente"
+                android:textSize="20sp" />
 
         </RelativeLayout>
-        <!--END COLUMN-->
-
-        <!--COLUMN-->
-        <RelativeLayout
-            android:background="@android:color/holo_green_light"
-            android:layout_height="fill_parent"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <ImageView
-                android:id="@+id/categoria_image_4"
-                android:src="@android:drawable/ic_dialog_alert"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"/>
-
-            <TextView
-                android:text="BARONE"
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:gravity="center"
-                android:layout_below="@+id/categoria_image_4"
-                android:textAllCaps="true"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"/>
-        </RelativeLayout>
-        <!--END COLUMN-->
 
     </LinearLayout>
+
+    <!--ROW-->
+    <LinearLayout
+        android:layout_height="0dp"
+        android:layout_width="fill_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:baselineAligned="false"
+        android:padding="10dp">
+
+        <Button
+            android:id="@+id/goToCustomers"
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
+            android:text="@string/clienti"
+            android:background="@android:drawable/dialog_holo_light_frame"
+            android:backgroundTint="@color/bluardo"
+            android:drawableLeft="@drawable/ic_customers"
+            android:backgroundTintMode="add"
+            android:gravity="center_vertical|start"
+            android:textAlignment="gravity"
+            android:typeface="sans"
+            android:paddingStart="20dp"
+            android:singleLine="true"
+            android:textSize="25sp" />
+
+        <Button
+            android:id="@+id/goToProducts"
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
+            android:text="@string/prodotti"
+            android:background="@android:drawable/dialog_holo_light_frame"
+            android:drawableLeft="@drawable/ic_product"
+            android:gravity="center_vertical|start"
+            android:textAlignment="gravity"
+            android:typeface="sans"
+            android:paddingStart="20dp"
+            android:singleLine="true"
+            android:textSize="25sp" />
+
+        <Button
+            android:id="@+id/goToWaitingOrders"
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
+            android:text="@string/ordini_in_attesa"
+            android:textAlignment="gravity"
+            android:background="@android:drawable/dialog_holo_light_frame"
+            android:backgroundTint="@color/verdino"
+            android:drawableLeft="@drawable/ic_orders"
+            android:backgroundTintMode="add"
+            android:gravity="center_vertical|start"
+            android:typeface="sans"
+            android:paddingStart="20dp"
+            android:singleLine="true"
+            android:textSize="25sp" />
+
+        <Button
+            android:id="@+id/goToMessages"
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
+            android:text="@string/messaggi"
+            android:textAlignment="gravity"
+            android:background="@android:drawable/dialog_holo_light_frame"
+            android:backgroundTint="@color/giallastro"
+            android:drawableLeft="@drawable/ic_message"
+            android:backgroundTintMode="add"
+            android:gravity="center_vertical|start"
+            android:typeface="sans"
+            android:paddingStart="20dp"
+            android:singleLine="true"
+            android:textSize="25sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|end"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="v 1.0"
+        android:id="@+id/txtVersion" />
     <!--END ROW-->
+
 
 
     <!--<ListView-->

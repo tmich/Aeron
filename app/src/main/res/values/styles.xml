@@ -24,4 +24,8 @@
     <!-- Backward-compatible version of ?android:attr/buttonBarButtonStyle -->
     <style name="ButtonBarButton" />
 
+    <style name="DefaultActivity">
+        <item name="android:background">@drawable/snow_texture</item>
+    </style>
+
 </resources>

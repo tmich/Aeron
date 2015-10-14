@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="it.aeg2000srl.aeron" >
+    package="it.aeg2000srl.aeron"
+    android:versionCode="1"
+    android:versionName="0.9" >
 
     <uses-permission android:name="android.permission.INTERNET" />
 
