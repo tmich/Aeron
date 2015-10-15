@@ -183,7 +183,7 @@ public class OrderIcewerActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_order, menu);
+        getMenuInflater().inflate(R.menu.menu_order_icewer, menu);
         return true;
     }
 
@@ -206,7 +206,7 @@ public class OrderIcewerActivity extends AppCompatActivity {
         }
         else if (id == R.id.action_send) {
             if (order.getItems().size() > 0) {
-                long newId = save();
+                //long newId = save();
                 send();
             }
             else {
@@ -242,7 +242,7 @@ public class OrderIcewerActivity extends AppCompatActivity {
         barProgressDialog.show();
         updateBarHandler = new Handler();
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String url = SP.getString("api_address", getString(R.string.test_url));
+        String url = SP.getString("pref_default_api_url", getString(R.string.test_url));
         new OrderIcewerSender(url, order).execute("");
     }
 
@@ -360,7 +360,7 @@ public class OrderIcewerActivity extends AppCompatActivity {
 
             try {
                 // Send GET data request
-                URL url = new URL(_url + "/orders/new" );
+                URL url = new URL(_url + "/icewer/new" );
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestProperty("Content-Type", "application/json");
                 conn.setRequestProperty("Accept", "application/json");
