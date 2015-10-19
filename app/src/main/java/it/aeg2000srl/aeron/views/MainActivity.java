@@ -8,18 +8,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import it.aeg2000srl.aeron.R;
-import it.aeg2000srl.aeron.core.Order;
 import it.aeg2000srl.aeron.services.UseCasesService;
-import it.aeg2000srl.aeron.views.adapters.OrdersArrayAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     ListView lstWaitingOrders;
     UseCasesService useCasesService;
     TextView txtVersion;
+    View btnGoToWaitingOrders;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +49,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent goToCustomersIntent = new Intent(MainActivity.this, CustomersActivity.class);
                 startActivity(goToCustomersIntent);
+            }
+        });
+
+        btnGoToWaitingOrders = findViewById(R.id.goToWaitingOrders);
+        btnGoToWaitingOrders.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent goToWaitingOrdersIntent = new Intent(MainActivity.this, WaitingOrdersAllActivity.class);
+                startActivity(goToWaitingOrdersIntent);
             }
         });
 

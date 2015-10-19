@@ -52,7 +52,8 @@
     <string name="title_activity_login">Accesso</string>
     <string name="prodotti">&#160;&#160;&#160;Listino Prodotti</string>
     <string name="clienti">&#160;&#160;&#160;Gestione Clienti</string>
-    <string name="ordini_in_attesa">&#160;&#160;&#160;visualizza Ordini</string>
+    <string name="ordini_in_attesa">&#160;&#160;&#160;Ordini in attesa</string>
     <string name="messaggi">&#160;&#160;&#160;Messaggi</string>
     <string name="cerca_cliente">cerca cliente</string>
+    <string name="title_activity_waiting_orders_all">Ordini in attesa</string>
 </resources>

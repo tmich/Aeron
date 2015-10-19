@@ -151,7 +151,8 @@ public class CustomersActivity extends AppCompatActivity implements SearchView.O
     /***********************************************************************************************/
     class DownloadCustomersService extends AsyncTask<String, Integer, Integer> {
         private String url = null;
-        private final int CONN_TIMEOUT = 10000;
+        private final int CONN_TIMEOUT = 30000;
+        private final int READ_TIMEOUT = 30000;
         private Exception exception;
         private List<Customer> data;
         private Handler handler;
@@ -174,7 +175,7 @@ public class CustomersActivity extends AppCompatActivity implements SearchView.O
                 URL url = new URL(this.url);
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setConnectTimeout(CONN_TIMEOUT);
-                urlConnection.setReadTimeout(20000);
+                urlConnection.setReadTimeout(READ_TIMEOUT);
                 InputStream in = new BufferedInputStream(urlConnection.getInputStream());
                 String Content = readStream(in);
                 urlConnection.disconnect();
