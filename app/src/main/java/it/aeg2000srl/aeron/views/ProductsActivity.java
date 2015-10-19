@@ -198,7 +198,7 @@ public class ProductsActivity extends AppCompatActivity implements SearchView.On
                 URL url = new URL(this.url);
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setConnectTimeout(CONN_TIMEOUT);
-                urlConnection.setReadTimeout(20000);
+                urlConnection.setReadTimeout(30000);
                 InputStream in = new BufferedInputStream(urlConnection.getInputStream());
                 String Content = readStream(in);
                 urlConnection.disconnect();
