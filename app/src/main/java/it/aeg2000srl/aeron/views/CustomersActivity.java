@@ -152,7 +152,7 @@ public class CustomersActivity extends AppCompatActivity implements SearchView.O
     class DownloadCustomersService extends AsyncTask<String, Integer, Integer> {
         private String url = null;
         private final int CONN_TIMEOUT = 30000;
-        private final int READ_TIMEOUT = 30000;
+        private final int READ_TIMEOUT = 60000;
         private Exception exception;
         private List<Customer> data;
         private Handler handler;

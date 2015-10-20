@@ -177,7 +177,7 @@ public class ProductsActivity extends AppCompatActivity implements SearchView.On
     class DownloadProductsService extends AsyncTask<String, Integer, Integer> {
         private String url = null;
         private final int CONN_TIMEOUT = 30000;
-        private final int READ_TIMEOUT = 30000;
+        private final int READ_TIMEOUT = 60000;
         private Exception exception;
         private List<Product> data;
         private Handler handler;
