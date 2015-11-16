@@ -105,10 +105,43 @@ public class OrderRepository implements IRepository<IOrder> {
         EOrder entity = OrderFactory.toEntity(order);
         entity.save();
 
+        // differenza tra gli items presenti
+        ArrayList<IOrderItem> itemsToSave = new ArrayList<>(order.getItems().size());
+        ArrayList<IOrderItem> itemsToRemove = new ArrayList<>(order.getItems().size());
+
+//        for(IOrderItem item : order.getItems()) {
+//            EOrderItem eOrderItem = OrderItemFactory.toEntity(item);
+//            eOrderItem.eOrder = entity;
+//            eOrderItem.save();
+//        }
+
+        List<EOrderItem> itemsOnDb = EOrderItem.find(EOrderItem.class, "e_order = ?", String.valueOf(order.getId()));
+
+        // items da tenere
         for(IOrderItem item : order.getItems()) {
-            EOrderItem eOrderItem = OrderItemFactory.toEntity(item);
+            itemsToSave.add(item);
+        }
+
+        // items da eliminare
+        for(EOrderItem it : itemsOnDb) {
+            IOrderItem iit = new OrderItemFactory().from(it).make();
+            if(!(order.getItems().contains(iit))) {
+                itemsToRemove.add(iit);
+            }
+        }
+
+        // salvataggio items
+        for (IOrderItem itemToSave :
+                itemsToSave) {
+            EOrderItem eOrderItem = OrderItemFactory.toEntity(itemToSave);
             eOrderItem.eOrder = entity;
             eOrderItem.save();
+        }
+
+        // eliminazione items
+        for(IOrderItem itemToRemove : itemsToRemove) {
+            EOrderItem eOrderItem = OrderItemFactory.toEntity(itemToRemove);
+            eOrderItem.delete();
         }
 
         return entity.getId();

@@ -1,5 +1,7 @@
 package it.aeg2000srl.aeron.core;
 
+import java.util.Objects;
+
 /**
  * Created by tiziano.michelessi on 06/10/2015.
  */
@@ -120,5 +122,18 @@ public class OrderItem implements IOrderItem {
     @Override
     public double getPrice() {
         return price;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null) return false;
+        if (other == this) return true;
+        if (!(other instanceof OrderItem )) return false;
+        return (((OrderItem) other).getId() == this.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getId(), this.getProductCode(), this.order.getId());
     }
 }

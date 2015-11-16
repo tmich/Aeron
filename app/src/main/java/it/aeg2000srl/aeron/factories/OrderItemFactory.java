@@ -39,6 +39,7 @@ public class OrderItemFactory implements IFactory<EOrderItem, OrderItem> {
         OrderFactory orderFactory = new OrderFactory();
         OrderItem orderItem = new OrderItem(product, entity.quantity, entity.notes, entity.discount);
         orderItem.setOrder(orderFactory.from(entity.eOrder).make());
+        orderItem.setId(entity.getId());
         return orderItem;
     }
 }
