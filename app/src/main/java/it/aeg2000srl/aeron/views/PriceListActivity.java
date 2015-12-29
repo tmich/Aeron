@@ -170,7 +170,6 @@ public class PriceListActivity extends AppCompatActivity {
     protected void update() {
 //        txtCustomerName.setText(customer.getName());
         setTitle(getString(R.string.title_activity_price_list)+ " " + customer.getName());
-        // TODO: service layer
         PriceListRepository priceListRepository = new PriceListRepository();
         PriceList pl = priceListRepository.getPriceListForCustomerId(customer.getId());
         getAdapter().clear();

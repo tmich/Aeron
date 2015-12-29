@@ -40,6 +40,8 @@ import java.util.Date;
 import java.util.List;
 
 import it.aeg2000srl.aeron.R;
+import it.aeg2000srl.aeron.core.Cart;
+import it.aeg2000srl.aeron.core.CartItem;
 import it.aeg2000srl.aeron.core.Customer;
 import it.aeg2000srl.aeron.core.FavoriteProduct;
 import it.aeg2000srl.aeron.core.IOrder;
@@ -84,12 +86,17 @@ public class OrderActivity extends AppCompatActivity {
             if (intent.getAction() != null) {
                 if (intent.getAction().equals(getString(R.string.actionNewOrder))) {
                     // creazione nuovo ordine
-                    long customerId = intent.getLongExtra(getString(R.string.customerId), 0);
-                    Customer customer = customerRepository.findById(customerId);
+                    //long customerId = intent.getLongExtra(getString(R.string.customerId), 0);
+                    //long customerId = intent.getLongExtra(getString(R.string.customerId), 0);
+                    //Customer customer = customerRepository.findById(customerId);
+
+                    // Carrello
+                    Cart cart = (Cart) intent.getExtras().getSerializable("cart");
+                    Customer customer = cart.getCustomer();
                     order = new Order(customer);
 
                     // verifico se c'è un carrello valorizzato
-                    ArrayList<String> cart = intent.getStringArrayListExtra(getString(R.string.cart));
+                    /*ArrayList<String> cart = intent.getStringArrayListExtra(getString(R.string.cart));
                     if (cart != null) {
                         // aggiungo i prodotti all'ordine
                         for (String productCode : cart) {
@@ -99,7 +106,17 @@ public class OrderActivity extends AppCompatActivity {
                             order.add(product, 1, "", "");
                         }
                         updateItems();
+                    }*/
+
+
+                    ProductRepository productRepository = new ProductRepository();
+                    for (CartItem item : cart.getItems()) {
+                        Product product = productRepository.findByCode(item.getProductCode());
+                        order.add(product, item.getQuantity(), item.getNotes(), item.getDiscount());
                     }
+                    updateItems();
+                    intent.getExtras().remove("cart");
+                    // Carrello - Fine
                 } else {
                     // modifica di un ordine salvato
                     long orderId = intent.getLongExtra(getString(R.string.orderId), 0);
@@ -165,13 +182,17 @@ public class OrderActivity extends AppCompatActivity {
                 dialog.setOnOkListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        order.remove(item);
-                        item.setDiscount(dialog.getDiscount());
-                        item.setNotes(dialog.getNotes());
-                        item.setQuantity(dialog.getQuantity());
-                        item.setProductName(dialog.getProductName());
-                        order.add(item);
-                        updateItems();
+                        int idx = order.getItems().indexOf(item);
+                        if (idx >= 0) {
+                            //order.remove(item);
+                            //item.setDiscount(dialog.getDiscount());
+                            item.setNotes(dialog.getNotes());
+                            item.setQuantity(dialog.getQuantity());
+                            item.setProductName(dialog.getProductName());
+                            //order.add(item);
+                            order.getItems().set(order.getItems().indexOf(item), item);
+                            updateItems();
+                        }
                         dialog.dismiss();
                     }
                 });

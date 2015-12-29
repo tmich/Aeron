@@ -13,13 +13,20 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import it.aeg2000srl.aeron.R;
+import it.aeg2000srl.aeron.core.Cart;
+import it.aeg2000srl.aeron.core.CartItem;
 import it.aeg2000srl.aeron.core.Customer;
 import it.aeg2000srl.aeron.core.FavoriteProduct;
+import it.aeg2000srl.aeron.core.IProduct;
+import it.aeg2000srl.aeron.core.OrderItem;
+import it.aeg2000srl.aeron.factories.CartFactory;
 import it.aeg2000srl.aeron.repositories.CustomerRepository;
+import it.aeg2000srl.aeron.repositories.ProductRepository;
 import it.aeg2000srl.aeron.services.UseCasesService;
 import it.aeg2000srl.aeron.views.adapters.FavoriteProductsArrayAdapter;
 
@@ -33,9 +40,11 @@ public class CustomerDetailsActivity extends AppCompatActivity {
     Button btnNewOrderIcewer;
     Button btnPriceList;
 //    Button btnWaitingOrders;
+    CheckBox chk;
     ListView lstFavorites;
     UseCasesService service;
     Menu menu;
+    Cart cart = new Cart();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +75,10 @@ public class CustomerDetailsActivity extends AppCompatActivity {
             finish();
         }
 
+        // Carrello
+        cart.setCustomer(customer);
+        // Carrello - Fine
+
         // creazione nuovo ordine
         btnNewOrder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,14 +87,11 @@ public class CustomerDetailsActivity extends AppCompatActivity {
                 intent.setAction(getString(R.string.actionNewOrder));
                 intent.putExtra(getString(R.string.customerId), customer.getId());
 
-                // preferiti selezionati
-                ArrayList<String> selectedCodes = new ArrayList<>();
-                for (FavoriteProduct fav : getFavoritesAdapter().getFavorites()) {
-                    if (fav.isSelected()) {
-                        selectedCodes.add(fav.getCode());
-                    }
-                }
-                intent.putStringArrayListExtra(getString(R.string.cart), selectedCodes);
+                //carrello
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("cart", cart);
+                intent.putExtras(bundle);
+                //intent.putStringArrayListExtra(getString(R.string.cart), selectedCodes);
                 startActivity(intent);
             }
         });
@@ -112,10 +122,48 @@ public class CustomerDetailsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 FavoriteProduct fav = getFavoritesAdapter().getItem(i);
-                fav.setSelected(!fav.isSelected());
-                ((CheckBox)view.findViewById(R.id.checkBox1)).setChecked(fav.isSelected());
+                chk = ((CheckBox) view.findViewById(R.id.checkBox1));
+
+                // Carrello
+                ProductRepository productRepository = new ProductRepository();
+                IProduct product = productRepository.findById(fav.getProductId());
+                CartItem _itm = new CartItem(product, 1, "");
+                final CartItem item = ( cart.getItems().contains(_itm) ? cart.getItems().get(cart.getItems().indexOf(_itm)) : _itm);
+                final CartItemDialog dialog = new CartItemDialog(CustomerDetailsActivity.this);
+                //dialog.setTitle("Modifica");
+                dialog.setProductName(item.getProductName());
+                dialog.setQuantity(item.getQuantity());
+                dialog.setNotes(item.getNotes());
+                dialog.setDiscount(item.getDiscount());
+
+                dialog.setOnOkListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        cart.getItems().remove(item);
+                        item.setDiscount(dialog.getDiscount());
+                        item.setNotes(dialog.getNotes());
+                        item.setQuantity(dialog.getQuantity());
+                        item.setProductName(dialog.getProductName());
+                        cart.getItems().add(item);
+                        chk.setChecked(true);
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.setOnCancelListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        chk.setChecked(false);
+                        cart.getItems().remove(item);
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+                // Carrello - Fine
             }
         });
+
 
     }
 
@@ -127,8 +175,18 @@ public class CustomerDetailsActivity extends AppCompatActivity {
         // lista prodotti preferiti
         lstFavorites.setAdapter(new FavoriteProductsArrayAdapter(this, service.getFavorites(customer)));
 
+        // carrello
+        FavoriteProductsArrayAdapter adapt = getFavoritesAdapter();
+        ProductRepository productRepository = new ProductRepository();
+
+        for (int i =0; i< lstFavorites.getCount(); i++ ) {
+            FavoriteProduct fav = adapt.getItem(i);
+            IProduct product = productRepository.findById(fav.getProductId());
+            CartItem _itm = new CartItem(product, 1, "");
+            fav.setSelected(cart.getItems().contains(_itm));
+        }
+
         //ordini in attesa
-//        btnWaitingOrders.setEnabled(service.getWaitingOrders(customer).size() > 0);
         updateMenuActions();
     }
 

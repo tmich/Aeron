@@ -72,7 +72,7 @@ public class PriceListRepository implements IRepository<DiscountProduct> {
 
     @Override
     public List<DiscountProduct> getAll() {
-        List<EDiscountProduct> discountedProducts = EDiscountProduct.find(EDiscountProduct.class, null, null);
+        List<EDiscountProduct> discountedProducts = EDiscountProduct.find(EDiscountProduct.class, null);
         List<DiscountProduct> pl = new ArrayList<>(discountedProducts.size());
 
         for (EDiscountProduct entity : discountedProducts) {

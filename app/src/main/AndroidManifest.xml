@@ -17,14 +17,17 @@
 
         <activity
             android:name=".views.MainActivity"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>
         <activity
             android:name=".views.ProductsActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_products" >
         </activity>
         <activity
             android:name=".views.CustomersActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_customers" >
         </activity>
         <activity
@@ -34,26 +37,32 @@
         </activity>
         <activity
             android:name=".views.CustomerDetailsActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_customer_details" >
         </activity>
         <activity
             android:name=".views.OrdersHistoryActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_orders_history" >
         </activity>
         <activity
             android:name=".views.WaitingOrdersActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_waiting_orders" >
         </activity>
         <activity
             android:name=".views.OrderIcewerActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_orders_icewer" >
         </activity>
         <activity
             android:name=".views.PriceListActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_price_list" >
         </activity>
         <activity
             android:name=".views.SettingsActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_settings" >
         </activity>
         <activity
@@ -69,11 +78,13 @@
         </activity>
         <activity
             android:name=".views.LoginActivity"
+            android:screenOrientation="portrait"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/title_activity_login" >
         </activity>
         <activity
             android:name=".views.WaitingOrdersAllActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_waiting_orders_all" >
         </activity>
     </application>

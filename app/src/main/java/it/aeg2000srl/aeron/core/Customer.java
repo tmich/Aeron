@@ -1,9 +1,11 @@
 package it.aeg2000srl.aeron.core;
 
+import java.io.Serializable;
+
 /**
  * Created by tiziano.michelessi on 06/10/2015.
  */
-public class Customer {
+public class Customer implements Serializable {
     protected long id;
     protected String code;
     protected String name;

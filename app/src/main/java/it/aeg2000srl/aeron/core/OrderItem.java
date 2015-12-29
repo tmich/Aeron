@@ -1,11 +1,12 @@
 package it.aeg2000srl.aeron.core;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Created by tiziano.michelessi on 06/10/2015.
  */
-public class OrderItem implements IOrderItem {
+public class OrderItem implements IOrderItem, Serializable {
     protected long id;
 //    protected Product product;
     protected long product_id;
@@ -32,6 +33,7 @@ public class OrderItem implements IOrderItem {
         this.notes = notes;
         this.discount = discount;
         this.product_code = product.getCode();
+        this.product_name = product.getName();
     }
 
     @Override
@@ -129,11 +131,11 @@ public class OrderItem implements IOrderItem {
         if (other == null) return false;
         if (other == this) return true;
         if (!(other instanceof OrderItem )) return false;
-        return (((OrderItem) other).getId() == this.getId());
+        return (((OrderItem) other).product_id == this.product_id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.getId(), this.getProductCode(), this.order.getId());
+        return Objects.hash(product_code, product_id, quantity);
     }
 }

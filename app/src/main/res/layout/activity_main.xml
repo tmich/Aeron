@@ -34,32 +34,32 @@
     </LinearLayout>
 
     <!--ROW-->
-    <LinearLayout
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:orientation="horizontal"
-        android:baselineAligned="false"
-        android:layout_marginBottom="40dp">
+    <!--<LinearLayout-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:baselineAligned="false"-->
+        <!--android:layout_marginBottom="40dp">-->
 
-        <!--COLUMN-->
-        <RelativeLayout
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:padding="10dp"
-            android:gravity="center"
-            android:layout_marginTop="10dp">
+        <!--&lt;!&ndash;COLUMN&ndash;&gt;-->
+        <!--<RelativeLayout-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:padding="10dp"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_marginTop="10dp">-->
 
-            <EditText
-                android:drawableEnd="@android:drawable/ic_menu_search"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/cerca_cliente"
-                android:textSize="20sp" />
+            <!--<EditText-->
+                <!--android:drawableEnd="@android:drawable/ic_menu_search"-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:hint="@string/cerca_cliente"-->
+                <!--android:textSize="20sp" />-->
 
-        </RelativeLayout>
+        <!--</RelativeLayout>-->
 
-    </LinearLayout>
+    <!--</LinearLayout>-->
 
     <!--ROW-->
     <LinearLayout
