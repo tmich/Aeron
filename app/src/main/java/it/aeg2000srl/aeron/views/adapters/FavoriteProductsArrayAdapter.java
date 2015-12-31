@@ -1,6 +1,7 @@
 package it.aeg2000srl.aeron.views.adapters;
 
 import android.app.Activity;
+import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,15 +40,16 @@ public class FavoriteProductsArrayAdapter extends ArrayAdapter<FavoriteProduct> 
     }
 
     static class ViewHolder {
+        ImageView image;
         TextView name;
-        CheckBox checkBox;
+        //CheckBox checkBox;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
         ViewHolder holder;
-        Log.v("ConvertView", String.valueOf(position));
+//        Log.v("ConvertView", String.valueOf(position));
 
         View rowView = convertView;
         if (rowView == null) {
@@ -54,17 +57,19 @@ public class FavoriteProductsArrayAdapter extends ArrayAdapter<FavoriteProduct> 
             rowView = inflater.inflate(R.layout.favorite_products, null, true);
             holder = new ViewHolder();
             holder.name = (TextView) rowView.findViewById(R.id.txtName);
-            holder.checkBox = (CheckBox) rowView.findViewById(R.id.checkBox1);
-            holder.checkBox.setTag(favorites.get(position));
+//            holder.checkBox = (CheckBox) rowView.findViewById(R.id.checkBox1);
+//            holder.checkBox.setTag(favorites.get(position));
+            holder.image = (ImageView)rowView.findViewById(R.id.imgCart);
+            holder.image.setTag(favorites.get(position));
             rowView.setTag(holder);
 
-            holder.checkBox.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    CheckBox cb = (CheckBox) v;
-                    FavoriteProduct fav = (FavoriteProduct) cb.getTag();
-                    fav.setSelected(cb.isChecked());
-                }
-            });
+//            holder.checkBox.setOnClickListener(new View.OnClickListener() {
+//                public void onClick(View v) {
+//                    CheckBox cb = (CheckBox) v;
+//                    FavoriteProduct fav = (FavoriteProduct) cb.getTag();
+//                    fav.setSelected(cb.isChecked());
+//                }
+//            });
         }
         else {
             holder = (ViewHolder) rowView.getTag();
@@ -72,7 +77,8 @@ public class FavoriteProductsArrayAdapter extends ArrayAdapter<FavoriteProduct> 
 
         FavoriteProduct fav = favorites.get(position);
         holder.name.setText(fav.getName());
-        holder.checkBox.setChecked(fav.isSelected());
+        //holder.checkBox.setChecked(fav.isSelected());
+        holder.image.setVisibility(fav.isSelected() ? View.VISIBLE : View.INVISIBLE);
 
         return rowView;
 

@@ -18,7 +18,7 @@ public class ValueDiscount implements IDiscount {
 
     @Override
     public String getDescription() {
-        return "-" + String.valueOf(value);
+        return "-" + String.valueOf(value) + " €";
     }
 
     @Override

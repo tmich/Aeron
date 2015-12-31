@@ -6,25 +6,34 @@
     android:padding="10dp"
     >
 
-    <CheckBox
+    <!--<CheckBox-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:id="@+id/checkBox1"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+
+        <!--android:enabled="false"-->
+        <!--android:focusable="false"-->
+        <!--android:focusableInTouchMode="false" />-->
+
+    <ImageView
+        android:id="@+id/imgCart"
         android:layout_alignParentStart="true"
-        android:id="@+id/checkBox1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        android:enabled="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false" />
+        android:src="@mipmap/ic_cart"
+        android:visibility="invisible"
+        />
 
     <ImageView
         android:layout_alignParentEnd="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@android:drawable/star_big_on"
-        android:layout_toLeftOf="@id/checkBox1"/>
+        android:layout_toLeftOf="@id/imgCart"/>
 
     <TextView
-        android:layout_toEndOf="@id/checkBox1"
+        android:layout_toEndOf="@id/imgCart"
         android:id="@+id/txtName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

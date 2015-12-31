@@ -8,12 +8,23 @@
     style="@style/DefaultActivity"
     tools:context="it.aeg2000srl.aeron.views.CustomerDetailsActivity">
 
-    <TextView
-        android:id="@+id/lblCustomerName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="20sp" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:src="@drawable/ic_customer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/lblCustomerName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="20sp" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/lblCustomerAddress"
@@ -32,19 +43,34 @@
 
         <Button
             android:id="@+id/btnNewOrder"
-            android:layout_width="wrap_content"
+            android:background="@android:drawable/dialog_holo_light_frame"
+            android:backgroundTint="@color/verdino"
+            android:drawableLeft="@android:drawable/ic_menu_add"
+            android:padding="15dp"
+            android:gravity="center_vertical|start"
+            android:layout_width="@dimen/button_new_order_width"
             android:layout_height="wrap_content"
             android:text="@string/new_order"/>
 
         <Button
             android:id="@+id/btnNewOrderIcewer"
-            android:layout_width="wrap_content"
+            android:background="@android:drawable/dialog_holo_light_frame"
+            android:backgroundTint="@color/grigetto"
+            android:drawableLeft="@android:drawable/ic_menu_add"
+            android:padding="15dp"
+            android:gravity="center_vertical|start"
+            android:layout_width="@dimen/button_new_order_width"
             android:layout_height="wrap_content"
             android:text="@string/new_order_icewer"/>
 
         <Button
             android:id="@+id/btnPriceList"
-            android:layout_width="wrap_content"
+            android:background="@android:drawable/dialog_holo_light_frame"
+            android:backgroundTint="@color/giallastro"
+            android:drawableLeft="@android:drawable/ic_menu_view"
+            android:padding="15dp"
+            android:gravity="center_vertical|start"
+            android:layout_width="@dimen/button_new_order_width"
             android:layout_height="wrap_content"
             android:text="@string/title_activity_price_list"/>
 
@@ -56,9 +82,23 @@
 
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/lstFavorites"
+    <TextView
+        android:text="@string/favorites"
+        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <ListView
+        android:id="@+id/lstFavorites"
+        android:longClickable="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/empty_favorites"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="@string/no_favorite"/>
 
 </LinearLayout>

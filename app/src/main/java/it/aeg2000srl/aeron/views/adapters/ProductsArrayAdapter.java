@@ -53,6 +53,7 @@ public class ProductsArrayAdapter extends ArrayAdapter<Product> {
         } else {
             holder = (ViewHolder) rowView.getTag();
         }
+
         IProduct product = products.get(position);
         holder.textView.setText(product.getName());
         holder.priceView.setText(String.format(Locale.ITALIAN, "%.2f €", product.getPrice()));

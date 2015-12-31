@@ -43,6 +43,7 @@ import it.aeg2000srl.aeron.R;
 import it.aeg2000srl.aeron.core.Cart;
 import it.aeg2000srl.aeron.core.CartItem;
 import it.aeg2000srl.aeron.core.Customer;
+import it.aeg2000srl.aeron.core.DiscountProduct;
 import it.aeg2000srl.aeron.core.FavoriteProduct;
 import it.aeg2000srl.aeron.core.IOrder;
 import it.aeg2000srl.aeron.core.IOrderItem;
@@ -55,6 +56,7 @@ import it.aeg2000srl.aeron.repositories.CustomerRepository;
 import it.aeg2000srl.aeron.repositories.FavoriteProductRepository;
 import it.aeg2000srl.aeron.repositories.OrderRepository;
 import it.aeg2000srl.aeron.repositories.ProductRepository;
+import it.aeg2000srl.aeron.services.UseCasesService;
 import it.aeg2000srl.aeron.views.adapters.OrderItemsArrayAdapter;
 
 public class OrderActivity extends AppCompatActivity {
@@ -67,6 +69,7 @@ public class OrderActivity extends AppCompatActivity {
     ImageButton btnDeleteItem;
     ProgressDialog barProgressDialog;
     Handler updateBarHandler;
+    final UseCasesService useCasesService = new UseCasesService();
 
     static int PICK_PRODUCT = 100;
 
@@ -95,25 +98,12 @@ public class OrderActivity extends AppCompatActivity {
                     Customer customer = cart.getCustomer();
                     order = new Order(customer);
 
-                    // verifico se c'è un carrello valorizzato
-                    /*ArrayList<String> cart = intent.getStringArrayListExtra(getString(R.string.cart));
-                    if (cart != null) {
-                        // aggiungo i prodotti all'ordine
-                        for (String productCode : cart) {
-                            ProductRepository productRepository = new ProductRepository();
-                            Product product = productRepository.findByCode(productCode);
-
-                            order.add(product, 1, "", "");
-                        }
-                        updateItems();
-                    }*/
-
-
                     ProductRepository productRepository = new ProductRepository();
                     for (CartItem item : cart.getItems()) {
                         Product product = productRepository.findByCode(item.getProductCode());
                         order.add(product, item.getQuantity(), item.getNotes(), item.getDiscount());
                     }
+
                     updateItems();
                     intent.getExtras().remove("cart");
                     // Carrello - Fine
@@ -131,6 +121,7 @@ public class OrderActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(OrderActivity.this, ProductsActivity.class);
                 intent.setAction(getString(R.string.PICK_PRODUCT));
+                intent.putExtra("customerId", order.getCustomerId());
                 startActivityForResult(intent, PICK_PRODUCT);
             }
         });
@@ -174,22 +165,26 @@ public class OrderActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 final OrderItem item = (OrderItem)getItemsAdapter().getItem(i);
                 final OrderItemDialog dialog = new OrderItemDialog(OrderActivity.this);
-                dialog.setTitle("Modifica");
+                //dialog.setTitle("Modifica");
                 dialog.setProductName(item.getProductName());
                 dialog.setQuantity(item.getQuantity());
                 dialog.setNotes(item.getNotes());
-                dialog.setDiscount(item.getDiscount());
+                // sconto?
+                String discount ="";
+                DiscountProduct discountProduct = useCasesService.getDiscountedProductForCustomerId(order.getCustomerId(), item.getProductCode());
+                if(discountProduct != null) {
+                    discount = discountProduct.getDiscount().getDescription();
+                    dialog.setDiscount(discount);
+                }
                 dialog.setOnOkListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         int idx = order.getItems().indexOf(item);
                         if (idx >= 0) {
-                            //order.remove(item);
-                            //item.setDiscount(dialog.getDiscount());
+                            //item.setDiscount(discount);
                             item.setNotes(dialog.getNotes());
                             item.setQuantity(dialog.getQuantity());
                             item.setProductName(dialog.getProductName());
-                            //order.add(item);
                             order.getItems().set(order.getItems().indexOf(item), item);
                             updateItems();
                         }
@@ -208,10 +203,15 @@ public class OrderActivity extends AppCompatActivity {
             String productCode = data.getStringExtra(getString(R.string.productCode));
             int qty = data.getIntExtra(getString(R.string.quantity), 1);
             String notes = data.getStringExtra(getString(R.string.notes));
-            String discount = data.getStringExtra(getString(R.string.discount));
+            // sconto?
+            String discount = "";
+            DiscountProduct discountProduct = useCasesService.getDiscountedProductForCustomerId(order.getCustomerId(), productCode);
+            if(discountProduct != null) {
+                discount = discountProduct.getDiscount().getDescription();
+            }
+            //String discount = data.getStringExtra(getString(R.string.discount));
             ProductRepository productRepository = new ProductRepository();
             Product product = productRepository.findByCode(productCode);
-
             order.add(product, qty, notes, discount);
             updateItems();
 //            Toast.makeText(this, String.valueOf(order.getItems().size()), Toast.LENGTH_SHORT).show();
@@ -224,6 +224,7 @@ public class OrderActivity extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         txtCustomerName.setText(customerRepository.findById(order.getCustomerId()).getName());
+        setTitle("Nuovo ordine per " + customerRepository.findById(order.getCustomerId()).getName());
     }
 
     @Override
@@ -439,7 +440,11 @@ public class OrderActivity extends AppCompatActivity {
                     JSONObject obj = new JSONObject();
                     obj.put("product_code", orderItem.getProductCode());
                     obj.put("qty", orderItem.getQuantity());
-                    obj.put("notes", orderItem.getNotes());
+                    String notes = orderItem.getNotes();
+                    if (! orderItem.getDiscount().isEmpty()) {
+                        notes += " **[" + orderItem.getDiscount() + "]**";
+                    }
+                    obj.put("notes", notes );
                     voci.put(obj);
                 }
 

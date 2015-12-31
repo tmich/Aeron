@@ -29,6 +29,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import it.aeg2000srl.aeron.R;
+import it.aeg2000srl.aeron.core.DiscountProduct;
 import it.aeg2000srl.aeron.core.PercentDiscount;
 import it.aeg2000srl.aeron.core.Product;
 import it.aeg2000srl.aeron.repositories.ProductRepository;
@@ -52,17 +53,27 @@ public class ProductsActivity extends AppCompatActivity implements SearchView.On
         service = new UseCasesService();
         repo = new ProductRepository();
 
+
         if(getIntent() != null) {
             Intent intent = getIntent();
             if(intent.getAction() != null) {
                 if (intent.getAction().equals(getString(R.string.PICK_PRODUCT))) {
                     setTitle("Selezione prodotto");
+                    final long customerId = intent.getLongExtra("customerId", 0);
                     // Restituisco al chiamante il codice prodotto selezionato
                     productsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                             final Product product = getProductsAdapter().getItem(i);
                             final OrderItemDialog dialog = new OrderItemDialog(ProductsActivity.this);
+
+                            // sconto?
+                            UseCasesService useCasesService = new UseCasesService();
+                            DiscountProduct discountProduct = useCasesService.getDiscountedProductForCustomerId(customerId, product.getCode());
+                            if (discountProduct != null) {
+                                dialog.setDiscount(discountProduct.getDiscount().getDescription());
+                            }
+
                             dialog.setProductName(product.getName());
                             dialog.setOnOkListener(new View.OnClickListener() {
                                 @Override

@@ -1,14 +1,18 @@
 package it.aeg2000srl.aeron.views;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.PopupMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +25,7 @@ import it.aeg2000srl.aeron.R;
 import it.aeg2000srl.aeron.core.Cart;
 import it.aeg2000srl.aeron.core.CartItem;
 import it.aeg2000srl.aeron.core.Customer;
+import it.aeg2000srl.aeron.core.DiscountProduct;
 import it.aeg2000srl.aeron.core.FavoriteProduct;
 import it.aeg2000srl.aeron.core.IProduct;
 import it.aeg2000srl.aeron.core.OrderItem;
@@ -40,8 +45,10 @@ public class CustomerDetailsActivity extends AppCompatActivity {
     Button btnNewOrderIcewer;
     Button btnPriceList;
 //    Button btnWaitingOrders;
-    CheckBox chk;
+//    CheckBox chk;
+    ImageView imgCart;
     ListView lstFavorites;
+    TextView empty_favorites;
     UseCasesService service;
     Menu menu;
     Cart cart = new Cart();
@@ -59,6 +66,7 @@ public class CustomerDetailsActivity extends AppCompatActivity {
         btnPriceList = (Button)findViewById(R.id.btnPriceList);
 //        btnWaitingOrders = (Button)findViewById(R.id.btnWaitingOrders);
         lstFavorites = (ListView)findViewById(R.id.lstFavorites);
+        empty_favorites = (TextView)findViewById(R.id.empty_favorites);
         service = new UseCasesService();
     }
 
@@ -118,34 +126,101 @@ public class CustomerDetailsActivity extends AppCompatActivity {
         });
 
         // lista prodotti preferiti
+
+        lstFavorites.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                final int selectedIndex = i;
+                //final CartItem cartItem = ( cart.getItems().get(selectedIndex));
+                FavoriteProduct fav = getFavoritesAdapter().getItem(i);
+                if (fav.isSelected()) {
+                    ProductRepository productRepository = new ProductRepository();
+                    IProduct product = productRepository.findById(fav.getProductId());
+                    final CartItem _itm = new CartItem(product, 1, "");
+                    final CartItem cartItem = (cart.getItems().contains(_itm) ? cart.getItems().get(cart.getItems().indexOf(_itm)) : null);
+
+                    if (cartItem != null) {
+                        //Creating the instance of PopupMenu
+                        PopupMenu popup = new PopupMenu(CustomerDetailsActivity.this, view);
+                        //Inflating the Popup using xml file
+                        popup.getMenuInflater().inflate(R.menu.popup_menu_cart_item, popup.getMenu());
+
+                        //registering popup with OnMenuItemClickListener
+                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            public boolean onMenuItemClick(MenuItem item) {
+//                        Toast.makeText(OrderActivity.this, "You Clicked : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                                if (item.getItemId() == R.id.deleteCartItem) {
+                                    cart.getItems().remove(cartItem);
+                                    getFavoritesAdapter().getItem(selectedIndex).setSelected(false);
+                                    getFavoritesAdapter().notifyDataSetChanged();
+                                }
+                                return true;
+                            }
+                        });
+                        popup.show();
+                    }
+                }
+                return true;
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
         lstFavorites.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                final int selectedIndex = i;
                 FavoriteProduct fav = getFavoritesAdapter().getItem(i);
-                chk = ((CheckBox) view.findViewById(R.id.checkBox1));
+//                chk = ((CheckBox) view.findViewById(R.id.checkBox1));
+                //imgCart = (ImageView) view.findViewById(R.id.imgCart);
 
                 // Carrello
                 ProductRepository productRepository = new ProductRepository();
                 IProduct product = productRepository.findById(fav.getProductId());
-                CartItem _itm = new CartItem(product, 1, "");
+                final CartItem _itm = new CartItem(product, 1, "");
                 final CartItem item = ( cart.getItems().contains(_itm) ? cart.getItems().get(cart.getItems().indexOf(_itm)) : _itm);
                 final CartItemDialog dialog = new CartItemDialog(CustomerDetailsActivity.this);
                 //dialog.setTitle("Modifica");
                 dialog.setProductName(item.getProductName());
                 dialog.setQuantity(item.getQuantity());
                 dialog.setNotes(item.getNotes());
-                dialog.setDiscount(item.getDiscount());
+                //dialog.setDiscount(item.getDiscount());
+                // sconto?
+                String discount ="";
+                UseCasesService useCasesService = new UseCasesService();
+                DiscountProduct discountProduct = useCasesService.getDiscountedProductForCustomerId(customer.getId(), item.getProductCode());
+                if(discountProduct != null) {
+                    discount = discountProduct.getDiscount().getDescription();
+                    dialog.setDiscount(discount);
+                }
+                //fav.setSelected(true);
 
                 dialog.setOnOkListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        cart.getItems().remove(item);
+                        //cart.getItems().remove(item);
                         item.setDiscount(dialog.getDiscount());
                         item.setNotes(dialog.getNotes());
                         item.setQuantity(dialog.getQuantity());
                         item.setProductName(dialog.getProductName());
-                        cart.getItems().add(item);
-                        chk.setChecked(true);
+                        //cart.getItems().add(item);
+                        int pos = cart.getItems().indexOf(item);
+                        if (pos >= 0)
+                            cart.getItems().set(pos, item);
+                        else
+                            cart.getItems().add(item);
+                        //chk.setChecked(true);
+                        //imgCart.setVisibility(View.VISIBLE);
+                        getFavoritesAdapter().getItem(selectedIndex).setSelected(true);
+                        getFavoritesAdapter().notifyDataSetChanged();
                         dialog.dismiss();
                     }
                 });
@@ -153,8 +228,10 @@ public class CustomerDetailsActivity extends AppCompatActivity {
                 dialog.setOnCancelListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        chk.setChecked(false);
-                        cart.getItems().remove(item);
+//                        chk.setChecked(false);
+                        //imgCart.setVisibility(View.INVISIBLE);
+                        //cart.getItems().remove(item);
+                        //getFavoritesAdapter().getItem(selectedIndex).setSelected(false);
                         dialog.dismiss();
                     }
                 });
@@ -174,6 +251,7 @@ public class CustomerDetailsActivity extends AppCompatActivity {
 
         // lista prodotti preferiti
         lstFavorites.setAdapter(new FavoriteProductsArrayAdapter(this, service.getFavorites(customer)));
+        empty_favorites.setVisibility( (lstFavorites.getCount() == 0 ? View.VISIBLE : View.INVISIBLE) );
 
         // carrello
         FavoriteProductsArrayAdapter adapt = getFavoritesAdapter();

@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import it.aeg2000srl.aeron.core.Customer;
+import it.aeg2000srl.aeron.core.DiscountProduct;
 import it.aeg2000srl.aeron.core.FavoriteProduct;
 import it.aeg2000srl.aeron.core.IOrder;
 import it.aeg2000srl.aeron.core.Order;
@@ -13,6 +14,7 @@ import it.aeg2000srl.aeron.core.Product;
 import it.aeg2000srl.aeron.repositories.CustomerRepository;
 import it.aeg2000srl.aeron.repositories.FavoriteProductRepository;
 import it.aeg2000srl.aeron.repositories.OrderRepository;
+import it.aeg2000srl.aeron.repositories.PriceListRepository;
 import it.aeg2000srl.aeron.repositories.ProductRepository;
 
 /**
@@ -87,6 +89,16 @@ public class UseCasesService {
             return found.subList(0, MAX_SIZE);
         }
         return found;
+    }
+
+    public DiscountProduct getDiscountedProductForCustomerId(long customerId, String productCode) {
+        PriceListRepository priceListRepository = new PriceListRepository();
+        return priceListRepository.getDiscountedProductForCustomerId(customerId, productCode);
+    }
+
+    public boolean isDiscountedProductForCustomer(long customerId, String productCode) {
+        PriceListRepository priceListRepository = new PriceListRepository();
+        return priceListRepository.getDiscountedProductForCustomerId(customerId, productCode) != null;
     }
 }
 

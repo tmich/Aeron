@@ -12,22 +12,43 @@
         android:paddingTop="10dp">
 
         <TextView
-            android:id="@+id/lblProductName"
+            android:id="@+id/lblSconto"
             android:textSize="20sp"
-            android:textStyle="bold"
+            android:paddingStart="10sp"
+            android:background="@color/giallastro"
+            android:layout_gravity="center_vertical"
+            android:visibility="invisible"
+            android:text="Sconto"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <NumberPicker
             android:id="@+id/txtQty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" />
+            android:orientation="vertical" />
+
+        <TextView
+            android:id="@+id/lblProductName"
+            android:textSize="20sp"
+            android:paddingStart="10sp"
+            android:textStyle="bold"
+            android:layout_width="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
         <EditText
             android:id="@+id/txtNotes"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
+            android:singleLine="true"
             android:textColor="#000"
             android:hint="@string/notes" />
 
@@ -57,7 +78,7 @@
                 android:id="@+id/dialogButtonCancel"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:text=" ELIMINA "
+                android:text=" Annulla "
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="5dp"
                 />

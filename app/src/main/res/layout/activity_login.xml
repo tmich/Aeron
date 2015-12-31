@@ -7,7 +7,23 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity"
-    android:background="#ffffff">
+    style="@style/DefaultActivity">
+
+    <LinearLayout
+        android:id="@+id/layout0"
+        android:layout_above="@+id/layout1"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:padding="10dp"
+        >
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            />
+        </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layout1"
@@ -18,6 +34,11 @@
         android:padding="10dp"
         >
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Accesso"
+            android:textSize="@dimen/abc_text_size_large_material" />
         <EditText
             android:id="@+id/etUserName"
             android:layout_width="match_parent"

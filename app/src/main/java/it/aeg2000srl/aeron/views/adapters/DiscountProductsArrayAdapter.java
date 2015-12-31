@@ -1,6 +1,7 @@
 package it.aeg2000srl.aeron.views.adapters;
 
 import android.app.Activity;
+import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import java.util.Locale;
 import it.aeg2000srl.aeron.R;
 import it.aeg2000srl.aeron.core.DiscountProduct;
 import it.aeg2000srl.aeron.core.IProduct;
+import it.aeg2000srl.aeron.repositories.ProductRepository;
 
 /**
  * Created by tiziano.michelessi on 12/10/2015.
@@ -52,7 +54,7 @@ public class DiscountProductsArrayAdapter extends ArrayAdapter<DiscountProduct> 
             rowView = inflater.inflate(R.layout.pricelist, null, true);
             holder = new ViewHolder();
             holder.textView = (TextView) rowView.findViewById(R.id.txtName);
-//            holder.priceView = (TextView) rowView.findViewById(R.id.txtPrice);
+            holder.priceView = (TextView) rowView.findViewById(R.id.txtPrice);
 //            holder.discountDesc = (TextView) rowView.findViewById(R.id.txtDiscountDesc);
             holder.discountedPriceView = (TextView) rowView.findViewById(R.id.txtDiscountedPrice);
             rowView.setTag(holder);
@@ -61,7 +63,14 @@ public class DiscountProductsArrayAdapter extends ArrayAdapter<DiscountProduct> 
         }
         DiscountProduct product = objects.get(position);
         holder.textView.setText(product.getName());
-//        holder.priceView.setText(String.format(Locale.ITALIAN, "%.2f €", product.getOriginalPrice()));
+
+        // Prezzo originale non scontato
+        ProductRepository productRepository = new ProductRepository();
+        IProduct origProd = productRepository.findByCode(product.getCode());
+        SpannableString price = new SpannableString(String.format(Locale.ITALIAN, "%.2f €", origProd.getPrice()));
+        price.setSpan(new android.text.style.StrikethroughSpan(), 0, price.length(), 0);
+        holder.priceView.setText(price);
+
 //        holder.discountDesc.setText(product.getDiscount().getDescription());
         holder.discountedPriceView.setText(String.format(Locale.ITALIAN, "%.2f €", product.getPrice()));
         return rowView;

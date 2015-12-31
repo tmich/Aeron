@@ -16,10 +16,13 @@ import it.aeg2000srl.aeron.R;
 public class OrderItemDialog extends Dialog {
     NumberPicker txtQty;
     EditText txtNotes;
-    EditText txtDiscount;
+    TextView txtDiscount;
+    TextView lblSconto;
     TextView lblProductName;
     Button btnOk;
     Button btnCancel;
+
+    String productName;
 
     public OrderItemDialog(Context context) {
         super(context);
@@ -31,7 +34,9 @@ public class OrderItemDialog extends Dialog {
         txtQty.setMaxValue(50);
 //        txtQty.setValue(1);
         txtNotes = (EditText)findViewById(R.id.txtNotes);
-        txtDiscount = (EditText)findViewById(R.id.txtDiscount);
+        txtDiscount = (TextView)findViewById(R.id.txtDiscount);
+        lblSconto = (TextView)findViewById(R.id.lblSconto);
+        lblSconto.setVisibility(View.INVISIBLE);
         lblProductName = (TextView)findViewById(R.id.lblProductName);
         btnOk = (Button)findViewById(R.id.dialogButtonOK);
         btnCancel = (Button)findViewById(R.id.dialogButtonCancel);
@@ -48,11 +53,13 @@ public class OrderItemDialog extends Dialog {
     }
 
     public void setProductName(String productName) {
-        lblProductName.setText(productName);
+        this.productName = productName;
+        setTitle(this.productName);
+        //lblProductName.setText(productName);
     }
 
     public String getProductName() {
-        return String.valueOf(lblProductName.getText());
+        return this.productName;
     }
 
     public void setQuantity(int quantity) {
@@ -78,5 +85,7 @@ public class OrderItemDialog extends Dialog {
 
     public void setDiscount(String discount) {
         txtDiscount.setText(discount);
+        lblSconto.setText("Prodotto scontato: " + discount);
+        lblSconto.setVisibility(View.VISIBLE);
     }
 }

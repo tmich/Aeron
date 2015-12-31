@@ -23,7 +23,8 @@ public class CartItemDialog extends OrderItemDialog {
         txtQty.setMaxValue(50);
 //        txtQty.setValue(1);
         txtNotes = (EditText)findViewById(R.id.txtNotes);
-        txtDiscount = (EditText)findViewById(R.id.txtDiscount);
+//        txtDiscount = (EditText)findViewById(R.id.txtDiscount);
+        lblSconto = (TextView)findViewById(R.id.lblSconto);
         lblProductName = (TextView)findViewById(R.id.lblProductName);
         btnOk = (Button)findViewById(R.id.dialogButtonOK);
         btnCancel = (Button)findViewById(R.id.dialogButtonCancel);
@@ -33,6 +34,12 @@ public class CartItemDialog extends OrderItemDialog {
                 dismiss();
             }
         });
+    }
+
+    public void setDiscount(String discount) {
+        txtDiscount.setText(discount);
+        lblSconto.setText("Prodotto scontato: " + discount);
+        lblSconto.setVisibility(View.VISIBLE);
     }
 
     public void setOnOkListener(View.OnClickListener listener) {

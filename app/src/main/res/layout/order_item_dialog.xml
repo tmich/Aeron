@@ -12,11 +12,49 @@
         android:paddingTop="10dp">
 
         <TextView
-            android:id="@+id/lblProductName"
+            android:id="@+id/lblSconto"
             android:textSize="20sp"
-            android:textStyle="bold"
+            android:paddingStart="10sp"
+            android:background="@color/giallastro"
+            android:layout_gravity="center_vertical"
+            android:visibility="invisible"
+            android:text="Sconto"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:paddingTop="10sp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:textSize="20sp"
+            android:paddingStart="10sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
+            android:text="Qta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <NumberPicker
+            android:id="@+id/txtQty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+        <TextView
+            android:id="@+id/lblProductName"
+            android:textSize="20sp"
+            android:paddingStart="10sp"
+            android:textStyle="bold"
+            android:visibility="invisible"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
 
         <!--<EditText-->
             <!--android:id="@+id/txtQty"-->
@@ -26,26 +64,25 @@
             <!--android:hint="@string/quantity"-->
             <!--android:inputType="number"-->
             <!--/>-->
-        <NumberPicker
-            android:id="@+id/txtQty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" />
+
 
         <EditText
             android:id="@+id/txtNotes"
-            android:layout_width="200dp"
+            android:paddingTop="30sp"
+            android:singleLine="true"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:textColor="#000"
             android:hint="@string/notes" />
 
-        <EditText
+        <TextView
             android:id="@+id/txtDiscount"
-            android:layout_width="80dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#000"
             android:visibility="invisible"
-            android:hint="@string/discount"/>
+            android:textColor="#000"
+            android:textSize="12sp"
+            />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -65,7 +102,7 @@
                 android:id="@+id/dialogButtonCancel"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:text=" Cancel "
+                android:text=" Annulla "
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_toRightOf="@+id/dialogButtonOK"

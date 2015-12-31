@@ -1,11 +1,13 @@
 package it.aeg2000srl.aeron.views.adapters;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -15,8 +17,10 @@ import android.widget.Toast;
 import java.util.List;
 
 import it.aeg2000srl.aeron.R;
+import it.aeg2000srl.aeron.core.DiscountProduct;
 import it.aeg2000srl.aeron.core.IOrderItem;
 import it.aeg2000srl.aeron.core.OrderItem;
+import it.aeg2000srl.aeron.services.UseCasesService;
 
 /**
  * Created by tiziano.michelessi on 07/10/2015.
@@ -24,6 +28,7 @@ import it.aeg2000srl.aeron.core.OrderItem;
 public class OrderItemsArrayAdapter extends ArrayAdapter<IOrderItem> {
     private final Activity context;
     private final List<IOrderItem> items;
+    private UseCasesService useCasesService = new UseCasesService();
 
     public OrderItemsArrayAdapter(Activity context, List<IOrderItem> items) {
         super(context, R.layout.order_items, items);
@@ -36,6 +41,7 @@ public class OrderItemsArrayAdapter extends ArrayAdapter<IOrderItem> {
     static class ViewHolder {
         public TextView txtProductName;
         public TextView txtQty;
+        public TextView txtDiscount;
 //        public ImageButton btnDeleteItem;
     }
 
@@ -55,16 +61,27 @@ public class OrderItemsArrayAdapter extends ArrayAdapter<IOrderItem> {
             holder = new ViewHolder();
             holder.txtProductName = (TextView) rowView.findViewById(R.id.txtName);
             holder.txtQty = (TextView) rowView.findViewById(R.id.txtQty);
-//            holder.btnDeleteItem = (ImageButton) rowView.findViewById(R.id.btnDeleteItem);
+            holder.txtDiscount = (TextView) rowView.findViewById(R.id.txtDiscount);
             rowView.setTag(holder);
         } else {
             holder = (ViewHolder) rowView.getTag();
         }
 
         IOrderItem item = items.get(position);
+
         holder.txtProductName.setText(item.getProductName());
         holder.txtQty.setText(String.valueOf(item.getQuantity()));
-//        holder.btnDeleteItem.setTag(item);
+        // sconto?
+//        UseCasesService useCasesService = new UseCasesService();
+//
+        if (item.getOrder() != null) {
+            DiscountProduct discountProduct = useCasesService.getDiscountedProductForCustomerId(item.getOrder().getCustomerId(), item.getProductCode());
+            if (discountProduct != null) {
+                //holder.txtProductName.setBackgroundColor(Color.GREEN);
+                holder.txtDiscount.setText(discountProduct.getDiscount().getDescription());
+                holder.txtDiscount.setBackgroundColor(Color.GREEN);
+            }
+        }
         return rowView;
     }
 }
