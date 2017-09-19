@@ -5,7 +5,7 @@ android {
         aeg2000 {
             keyAlias 'aeg2000'
             keyPassword 't1z1@n0'
-            storeFile file('H:/aeg2000/APKs/keystore.jks')
+            storeFile file('C:/Users/tiziano.michelessi/AndroidStudioProjects/Aeron/keystore.jks')
             storePassword 't1z1@n0'
         }
     }

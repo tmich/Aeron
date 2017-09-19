@@ -107,7 +107,7 @@
             android:text="@string/ordini_in_attesa"
             android:textAlignment="gravity"
             android:background="@android:drawable/dialog_holo_light_frame"
-            android:drawableLeft="@drawable/ic_orders"
+            android:drawableLeft="@android:drawable/ic_menu_recent_history"
             android:backgroundTint="@color/bluardo"
             android:gravity="center_vertical|start"
             android:typeface="sans"
